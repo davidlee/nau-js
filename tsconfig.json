@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": ["es6"],
-    "allowJs": true,
+    "target": "es6",
+    "module": "esnext",
+    "lib": ["esnext"],
     "outDir": "build",
     "rootDir": "src",
     "strict": true,
-    "esModuleInterop": true,
-    "types": ["node", "jest"],
-    "skipLibCheck": true
+    "strictNullChecks": true,
+    
+    "moduleResolution": "node",
+    "types": ["node"],
+    "skipLibCheck": true,
   },
   "include": ["src/**/*"],
   "exclude": ["src/**/*.spec.ts"]

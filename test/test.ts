@@ -1,10 +1,10 @@
-import test from 'ava'
+import {test} from 'ava'
 
-test('foo', (t) => {
+test.test('foo', (t) => {
   t.pass()
 })
 
-test('bar', async (t) => {
+test.test('bar', async (t) => {
   const bar = Promise.resolve('bar')
   t.is(await bar, 'bar')
 })

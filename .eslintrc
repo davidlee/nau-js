@@ -9,10 +9,11 @@
   ],
   "rules": {
     "no-console": 1,
-    "prettier/prettier": 2
+    "prettier/prettier": 2,
+    "@typescript-eslint/no-unsafe-call": "warn"
   },
   "env": {
-    "browser": true,
+    "browser": false,
     "node": true
   }
 }
