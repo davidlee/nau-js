@@ -8,21 +8,23 @@ overrides:
   semver@>=7.0.0 <7.5.2: '>=7.5.2'
 
 dependencies:
+  esbuild:
+    specifier: 0.19.2
+    version: 0.19.2
+  ts-fp:
+    specifier: ^1.0.0
+    version: 1.0.0
+
+optionalDependencies:
   blessed:
     specifier: ^0.1.81
     version: 0.1.81
   chalk:
     specifier: ^5.3.0
     version: 5.3.0
-  esbuild:
-    specifier: 0.19.2
-    version: 0.19.2
   lowdb:
     specifier: ^6.0.1
     version: 6.0.1
-  ts-fp:
-    specifier: ^1.0.0
-    version: 1.0.0
 
 devDependencies:
   '@types/node':
@@ -844,7 +846,9 @@ packages:
     resolution: {integrity: sha512-LoF5gae+hlmfORcG1M5+5XZi4LBmvlXTzwJWzUlPryN/SJdSflZvROM2TwkT0GMpq7oqT48NRd4GS7BiVBc5OQ==}
     engines: {node: '>= 0.8.0'}
     hasBin: true
+    requiresBuild: true
     dev: false
+    optional: true
 
   /brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
@@ -880,7 +884,9 @@ packages:
   /chalk@5.3.0:
     resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
+    requiresBuild: true
     dev: false
+    optional: true
 
   /chokidar@3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
@@ -1386,9 +1392,11 @@ packages:
   /lowdb@6.0.1:
     resolution: {integrity: sha512-1ktuKYLlQzAWwl4/PQkIr8JzNXgcTM6rAhpXaQ6BR+VwI98Q8ZwMFhBOn9u0ldcW3K/WWzhYpS3xyGTshgVGzA==}
     engines: {node: '>=16'}
+    requiresBuild: true
     dependencies:
       steno: 3.0.0
     dev: false
+    optional: true
 
   /lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
@@ -1617,7 +1625,9 @@ packages:
   /steno@3.0.0:
     resolution: {integrity: sha512-uZtn7Ht9yXLiYgOsmo8btj4+f7VxyYheMt8g6F1ANjyqByQXEE2Gygjgenp3otHH1TlHsS4JAaRGv5wJ1wvMNw==}
     engines: {node: '>=14.16'}
+    requiresBuild: true
     dev: false
+    optional: true
 
   /strip-ansi@6.0.1:
     resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
