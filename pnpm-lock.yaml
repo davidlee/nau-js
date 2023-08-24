@@ -46,6 +46,9 @@ devDependencies:
   eslint-config-prettier:
     specifier: ^9.0.0
     version: 9.0.0(eslint@8.47.0)
+  eslint-plugin-prettier:
+    specifier: ^4.2.0
+    version: 4.2.0(eslint-config-prettier@9.0.0)(eslint@8.47.0)(prettier@2.8.8)
   husky:
     specifier: ^8.0.3
     version: 8.0.3
@@ -64,9 +67,6 @@ devDependencies:
   rimraf:
     specifier: ^3.0.2
     version: 3.0.2
-  run-script-os:
-    specifier: ^1.1.6
-    version: 1.1.6
   shelljs:
     specifier: ^0.8.5
     version: 0.8.5
@@ -1067,6 +1067,23 @@ packages:
       eslint: 8.47.0
     dev: true
 
+  /eslint-plugin-prettier@4.2.0(eslint-config-prettier@9.0.0)(eslint@8.47.0)(prettier@2.8.8):
+    resolution: {integrity: sha512-w+EYWwMltYqlsirUG2LXROmC8cBIUSEpR4s/Oft8wX8Xm99FTfU+M+ehv47ZQbYPqD9ZAuCtZI6IuWw3Q004dw==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      eslint: '>=7.28.0'
+      eslint-config-prettier: '*'
+      prettier: '>=2.0.0'
+    peerDependenciesMeta:
+      eslint-config-prettier:
+        optional: true
+    dependencies:
+      eslint: 8.47.0
+      eslint-config-prettier: 9.0.0(eslint@8.47.0)
+      prettier: 2.8.8
+      prettier-linter-helpers: 1.0.0
+    dev: true
+
   /eslint-scope@7.2.2:
     resolution: {integrity: sha512-dOt21O7lTMhDM+X9mB4GX+DZrZtCUJPL/wlcTqxyrx5IvO0IYtILdtrQGQp+8n5S0gwSVmOf9NQrjMOgfQZlIg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -1161,6 +1178,10 @@ packages:
 
   /fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+    dev: true
+
+  /fast-diff@1.3.0:
+    resolution: {integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==}
     dev: true
 
   /fast-glob@3.3.1:
@@ -1596,6 +1617,13 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
+  /prettier-linter-helpers@1.0.0:
+    resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      fast-diff: 1.3.0
+    dev: true
+
   /prettier@2.8.8:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
@@ -1663,11 +1691,6 @@ packages:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
     dependencies:
       queue-microtask: 1.2.3
-    dev: true
-
-  /run-script-os@1.1.6:
-    resolution: {integrity: sha512-ql6P2LzhBTTDfzKts+Qo4H94VUKpxKDFz6QxxwaUZN0mwvi7L3lpOI7BqPCq7lgDh3XLl0dpeXwfcVIitlrYrw==}
-    hasBin: true
     dev: true
 
   /semver@5.7.2:

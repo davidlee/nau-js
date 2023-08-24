@@ -5,19 +5,20 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "test": "node --loader tsx --test-reporter spec --test test/*.ts",
+    "mon": "npx nodemon",
     "build": "rimraf ./build && tsc",
-    "start:dev": "npx nodemon",
     "start": "pnpm run build && node build/index.js",
-    "lint": "eslint . --ext .ts",
+    "lint": "pnpm exec eslint . --ext .ts",
     "prettier": "pnpm exec prettier --config .prettierrc -w 'src/**/*.ts' 'test/**/*.ts'",
     "prettier-check": "pnpm exec prettier --config .prettierrc -c 'src/**/*.ts' 'test/**/*.ts'",
     "prettier-watch": "pnpm exec onchange 'src/**/*.ts' 'test/**/*.ts' -- pnpm exec prettier --config .prettierrc -w {{changed}}",
-    "test": "pnpm exec tsx --test test/test.ts",
-    "watch": "pnpm exec tsx --test --watch --test-reporter spec test/test.ts"
+    "watch": "pnpm exec tsx --test --watch --test-reporter spec test/test.ts",
+    "prepare": "pnpm run prettier & pnpm run lint && pnpm test"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pnpm run test && pnpm run prettier-format"
+      "pre-commit": "pnpm run test && pnpm run prettier"
     }
   },
   "keywords": [],
@@ -30,6 +31,7 @@
     "@typescript-eslint/parser": "^6.4.1",
     "eslint": "^8.47.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^4.2.0",
     "husky": "^8.0.3",
     "nodemon": "^2.0.22",
     "onchange": "^7.1.0",
