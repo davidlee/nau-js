@@ -1,8 +1,5 @@
 {
   "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-type-checked",
     "prettier"
   ],
   "root": true,
@@ -23,13 +20,23 @@
   },
   "overrides": [
     {
+      "files": ["src/*.ts", "src/**/*.ts"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-type-checked",
+      ],
+      "rules": {
+        "no-console": 1,
+        "prettier/prettier": 2,
+        "@typescript-eslint/no-unsafe-call": 1
+      }
+    },
+    {
       "files": ["test/*.ts", "test/**/*.ts"],
       "rules": {
-        "*": "off",
-        "@typescript-eslint/no-floating-promises": "off",
-        "@typescript-eslint/no-unsafe-assignment": "off",
-        "@typescript-eslint/no-unsafe-call": "off",
-        "@typescript-eslint/no-unused-vars": "off",
+        "no-console": "off",
+        "@typescript-eslint/no-unsafe-call": "off"
       }
     }
   ]
