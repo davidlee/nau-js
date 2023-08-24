@@ -5,16 +5,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --loader tsx --test-reporter spec --test test/*.ts",
-    "mon": "npx nodemon",
-    "build": "rimraf ./build && tsc",
+    "test": "pnpm exec node --loader tsx --test-reporter spec --no-warnings --test test/*.ts",
+    "watch": "pnpm exec node --watch --loader tsx --test-reporter spec --no-warnings --test test/*.ts",
     "start": "pnpm run build && node build/index.js",
+    "build": "rm -fr ./build && tsc",
     "lint": "pnpm exec eslint . --ext .ts",
     "prettier": "pnpm exec prettier --config .prettierrc -w 'src/**/*.ts' 'test/**/*.ts'",
     "prettier-check": "pnpm exec prettier --config .prettierrc -c 'src/**/*.ts' 'test/**/*.ts'",
     "prettier-watch": "pnpm exec onchange 'src/**/*.ts' 'test/**/*.ts' -- pnpm exec prettier --config .prettierrc -w {{changed}}",
-    "watch": "pnpm exec tsx --test --watch --test-reporter spec test/test.ts",
-    "prepare": "pnpm run prettier & pnpm run lint && pnpm test"
+    "prep": "pnpm run prettier & pnpm run lint && pnpm test"
   },
   "husky": {
     "hooks": {

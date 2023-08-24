@@ -24,7 +24,7 @@
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-type-checked",
+        "plugin:@typescript-eslint/recommended-type-checked"
       ],
       "rules": {
         "no-console": 1,
