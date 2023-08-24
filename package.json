@@ -4,6 +4,10 @@
   "description": "time and attention management.",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=3"
+  },
   "scripts": {
     "test": "pnpm exec node --loader tsx --test-reporter spec --no-warnings --test test/*.ts",
     "watch": "pnpm exec node --watch --loader tsx --test-reporter spec --no-warnings --test test/*.ts",
