@@ -8,6 +8,9 @@ overrides:
   semver@>=7.0.0 <7.5.2: '>=7.5.2'
 
 dependencies:
+  '@types/argparse':
+    specifier: ^2.0.10
+    version: 2.0.10
   blessed:
     specifier: ^0.1.81
     version: 0.1.81
@@ -616,6 +619,10 @@ packages:
   /@tsconfig/node16@1.0.4:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
+
+  /@types/argparse@2.0.10:
+    resolution: {integrity: sha512-C4wahC3gz3vQtvPazrJ5ONwmK1zSDllQboiWvpMM/iOswCYfBREFnjFbq/iWKIVOCl8+m5Pk6eva6/ZSsDuIGA==}
+    dev: false
 
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}

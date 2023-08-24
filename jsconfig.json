@@ -5,14 +5,14 @@
     "lib": ["esnext"],
     "outDir": "build",
     "rootDir": "src",
-    "strict": false,
+    "strict": true,
     "strictNullChecks": true,
     "allowJs": true,    
-    "checkJs": false, 
+    "checkJs": false,    
     "moduleResolution": "node",
-    "types": ["node", "argParse"],
+    "types": ["node"],
     "skipLibCheck": true,
   },
-  "include": ["src/*.js", "src/**/*.js", "src/*.ts", "src/**/*.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["test/*"]
 }

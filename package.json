@@ -11,8 +11,8 @@
   "scripts": {
     "test": "pnpm exec node --loader tsx --test-reporter spec --no-warnings --test test/*.ts",
     "watch": "pnpm exec node --watch --loader tsx --test-reporter spec --no-warnings --test test/*.ts",
-    "start": "pnpm run build && node build/index.js",
-    "build": "rm -fr ./build && tsc",
+    "start": "pnpm run build && node --loader tsx build/index.js",
+    "build": "rm -fr ./build && pnpm exec tsc",
     "lint": "pnpm exec eslint . --ext .ts",
     "prettier": "pnpm exec prettier --config .prettierrc -w 'src/**/*.ts' 'test/**/*.ts'",
     "prettier-check": "pnpm exec prettier --config .prettierrc -c 'src/**/*.ts' 'test/**/*.ts'",
@@ -29,7 +29,7 @@
   "license": "non",
   "devDependencies": {
     "@types/node": "^20.5.1",
-    "@types/nodemon": "^1.19.2",
+    "@types/argparse": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
     "eslint": "^8.47.0",

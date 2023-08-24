@@ -1,1 +1,3 @@
-console.log('Hello world!')
+import { values, tokens } from './parser'
+
+// console.log([values, tokens])
