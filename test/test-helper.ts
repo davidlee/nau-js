@@ -2,4 +2,4 @@ function testHelper() {
   // TODO
 }
 
-export {testHelper as helper}
+export { testHelper as helper }

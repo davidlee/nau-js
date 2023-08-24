@@ -1,10 +1,12 @@
-import {test} from 'ava'
+import test from 'node:test'
+import assert from 'node:assert/strict'
+//import assert from 'node:assert'
 
-test.test('foo', (t) => {
-  t.pass()
+
+
+test('synchronous passing test', (t) => {
+  // This test passes because it does not throw an exception.
+  assert.strictEqual(1, 1)
 })
 
-test.test('bar', async (t) => {
-  const bar = Promise.resolve('bar')
-  t.is(await bar, 'bar')
 })

@@ -7,72 +7,39 @@
   "scripts": {
     "build": "rimraf ./build && tsc",
     "start:dev": "npx nodemon",
-    "start": "npm run build && node build/index.js",
-    "prettier": "prettier -c",
+    "start": "pnpm run build && node build/index.js",
     "lint": "eslint . --ext .ts",
-    "prettier-format": "run-script-os",
-    "prettier-format:win32": "prettier --config .prettierrc \"./src/**/*.ts\" --write",
-    "prettier-format:darwin:linux": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "prettier-format:default": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "prettier-watch": "run-script-os",
-    "prettier-watch:win32": "onchange \"src/**/*.ts\" -- prettier --write {{changed}}",
-    "prettier-watch:darwin:linux": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
-    "prettier-watch:default": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
-    "test": "xo && ava",
-    "test:watch": "ava --watch"
+    "prettier": "pnpm exec prettier --config .prettierrc -w 'src/**/*.ts' 'test/**/*.ts'",
+    "prettier-check": "pnpm exec prettier --config .prettierrc -c 'src/**/*.ts' 'test/**/*.ts'",
+    "prettier-watch": "pnpm exec onchange 'src/**/*.ts' 'test/**/*.ts' -- pnpm exec prettier --config .prettierrc -w {{changed}}",
+    "test": "pnpm exec tsx --test test/test.ts",
+    "watch": "pnpm exec tsx --test --watch --test-reporter spec test/test.ts"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run test && npm run prettier-format"
+      "pre-commit": "pnpm run test && pnpm run prettier-format"
     }
   },
   "keywords": [],
   "author": "",
   "license": "non",
   "devDependencies": {
-    "@types/node": "^18.17.8",
+    "@types/node": "^20.5.1",
+    "@types/nodemon": "^1.19.2",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
     "husky": "^8.0.3",
     "nodemon": "^2.0.22",
     "onchange": "^7.1.0",
     "pnpm": "^8.6.12",
     "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
-    "run-script-os": "^1.1.6",
+    "shelljs": "^0.8.5",
     "ts-node": "^10.9.1",
     "tsx": "^3.12.7",
-    "typescript": "^4.9.5",
-    "xo": "^0.56.0"
-  },
-  "xo": {
-    "prettier": true,
-    "semicolon": false,
-    "space": true,
-    "rules": {
-      "@typescript-eslint/no-unsafe-call": "off"
-    }
-  },
-  "ava": {
-    "files": [
-      "test/**/*",
-      "!test/test-helper.ts"
-    ],
-    "concurrency": 5,
-    "failFast": false,
-    "environmentVariables": {
-      "ENV": "test"
-    },
-    "verbose": true,
-    "require": [],
-    "nodeArguments": [
-      "--loader=tsx"
-    ],
-    "tap": true,
-    "typescript": {
-      "compile": "tsc",
-      "rewritePaths": {
-        "src/": "build/"
-      }
-    }
+    "typescript": "^4.9.5"
   },
   "dependencies": {
     "blessed": "^0.1.81",
