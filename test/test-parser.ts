@@ -74,7 +74,8 @@ describe('parseCommand', () => {
   })
 
   test('error: remove', (t) => {
-    let input = 'remove'.split(' ')
+    let input = ['remove']
+    
     assert.throws(
       () => {
         parseCommand(input)
@@ -104,13 +105,20 @@ describe('parseCommand', () => {
     assert.deepEqual(result, { name: 'done', ids: [5], rest: [] })
   })
 
-  test('parse: rm 20', { skip: true }, (t) => {
+  test('parse: rm 20', (t) => {
     let input = 'rm 20'.split(' ')
     let result = parseCommand(input)
-    assert.deepEqual(result, { name: 'removes', ids: [20], rest: [] })
+    assert.deepEqual(result, { name: 'remove', ids: [20], rest: [] })
   })
 
   test('parse: nonsense returns null', (t) => {
     assert.equal(parseCommand(['nonsense']), null)
   })
+
+  test('parse: rm 9-15', (t) => {
+    let input = 'rm 9-15'.split(' ')
+    let result = parseCommand(input)
+    assert.deepEqual(result, {name: 'remove', ids: [9,10,11,12,13,14,15], rest:[] })
+  })
+  // todo test  --
 })
