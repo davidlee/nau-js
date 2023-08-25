@@ -5,13 +5,19 @@
     "lib": ["esnext"],
     "outDir": "build",
     "rootDir": "src",
-    "strict": false,
+    "strict": true,
     "strictNullChecks": true,
     "allowJs": true,    
     "checkJs": false, 
     "moduleResolution": "node",
-    "types": ["node", "argParse"],
+    "types": ["node", "argParse","fp-ts"],
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "plugins": [
+      {
+        "name": "@effect/language-service"
+      }
+    ]
   },
   "include": ["src/*.js", "src/**/*.js", "src/*.ts", "src/**/*.ts"],
   "exclude": ["test/*"]

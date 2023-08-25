@@ -8,9 +8,9 @@ overrides:
   semver@>=7.0.0 <7.5.2: '>=7.5.2'
 
 dependencies:
-  '@types/argparse':
-    specifier: ^2.0.10
-    version: 2.0.10
+  '@effect/language-service':
+    specifier: ^0.0.21
+    version: 0.0.21
   blessed:
     specifier: ^0.1.81
     version: 0.1.81
@@ -20,20 +20,20 @@ dependencies:
   esbuild:
     specifier: 0.19.2
     version: 0.19.2
+  fp-ts:
+    specifier: ^2.16.1
+    version: 2.16.1
   lowdb:
     specifier: ^6.0.1
     version: 6.0.1
-  ts-fp:
-    specifier: ^1.0.0
-    version: 1.0.0
 
 devDependencies:
+  '@types/argparse':
+    specifier: ^2.0.10
+    version: 2.0.10
   '@types/node':
     specifier: ^20.5.1
     version: 20.5.1
-  '@types/nodemon':
-    specifier: ^1.19.2
-    version: 1.19.2
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.4.1
     version: 6.4.1(@typescript-eslint/parser@6.4.1)(eslint@8.47.0)(typescript@4.9.5)
@@ -92,6 +92,10 @@ packages:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
     dev: true
+
+  /@effect/language-service@0.0.21:
+    resolution: {integrity: sha512-e8vfKbjnbYiyneBincEFS0tzXluopGK77OkVFbPRtUbNDS5tJfb+jiwOQEiqASDsadcZmd+9J9+Q6v/z7GuN2g==}
+    dev: false
 
   /@esbuild-kit/cjs-loader@2.4.2:
     resolution: {integrity: sha512-BDXFbYOJzT/NBEtp71cvsrGPwGAMGRB/349rwKuoxNSiKjPraNNnlK6MIIabViCjqZugu6j+xeMDlEkWdHHJSg==}
@@ -622,24 +626,14 @@ packages:
 
   /@types/argparse@2.0.10:
     resolution: {integrity: sha512-C4wahC3gz3vQtvPazrJ5ONwmK1zSDllQboiWvpMM/iOswCYfBREFnjFbq/iWKIVOCl8+m5Pk6eva6/ZSsDuIGA==}
-    dev: false
+    dev: true
 
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
     dev: true
 
-  /@types/node@18.17.9:
-    resolution: {integrity: sha512-fxaKquqYcPOGwE7tC1anJaPJ0GHyOVzfA2oUoXECjBjrtsIz4YJvtNYsq8LUcjEUehEF+jGpx8Z+lFrtT6z0tg==}
-    dev: true
-
   /@types/node@20.5.1:
     resolution: {integrity: sha512-4tT2UrL5LBqDwoed9wZ6N3umC4Yhz3W3FloMmiiG4JwmUJWpie0c7lcnUNd4gtMKuDEO4wRVS8B6Xa0uMRsMKg==}
-    dev: true
-
-  /@types/nodemon@1.19.2:
-    resolution: {integrity: sha512-4GWiTN3HevkxMIxEQ7OpD3MAHhlVsX2tairCMRmf8oYZxmhHw9+UpQpIdGdJrjsMT2Ty26FtJzUUcP/qM5fR8A==}
-    dependencies:
-      '@types/node': 18.17.9
     dev: true
 
   /@types/semver@7.5.0:
@@ -1217,6 +1211,10 @@ packages:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
 
+  /fp-ts@2.16.1:
+    resolution: {integrity: sha512-by7U5W8dkIzcvDofUcO42yl9JbnHTEDBrzu3pt5fKT+Z4Oy85I21K80EYJYdjQGC2qum4Vo55Ag57iiIK4FYuA==}
+    dev: false
+
   /fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
@@ -1669,10 +1667,6 @@ packages:
     dependencies:
       typescript: 4.9.5
     dev: true
-
-  /ts-fp@1.0.0:
-    resolution: {integrity: sha512-y7n4MlYPw7S0hwOzklJSCYUqXxuRHsToZ1yAXmUkXN34i9bKYtgTxF5oUbfoNEXl3G9y1OQWSLDjb5aaDbVWdw==}
-    dev: false
 
   /ts-node@10.9.1(@types/node@20.5.1)(typescript@4.9.5):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}

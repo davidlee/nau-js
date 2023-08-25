@@ -1,5 +1,3 @@
-function testHelper() {
+export function testHelper() {
   // TODO
 }
-
-export { testHelper as helper }
