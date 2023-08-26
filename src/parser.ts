@@ -69,6 +69,29 @@ export function argsFromArgv(argv: string[]): string[] {
 
 // https://taskwarrior.org/docs/syntax/
 // task <filter> <command> <modifications> <miscellaneous>
+
+// first, find the first thing that looks like a command
+  // everything before it is a filter (ids, etc)
+  // everything after it is a modification
+
+
+export function processOne(arr: Array<any>, fn: Function): { input: string, output: string, index: number } | null {
+  for(let i = 0; i < arr.length; i++) {
+    const result = fn(arr[i])
+    if (result) {
+      return { input: arr[i], output: result, index: i }
+    }
+  }
+  return null
+}
+
+export function parse(tokens: string[]): { input: string, output: string, index: number } | null {
+  const result = processOne(tokens, recogniseCommand)
+  if(result) {
+    console.log('result', result)
+  }
+  return( result ? result : null )
+}
 export function parseCommand(tokens: string[], recur = true): Command | null {
   if (tokens.length === 0) return null
   let key = recogniseCommand(tokens[0])
