@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
-import { parse, parseCommand, recogniseCommand } from '../src/parser'
+import { parse, findFirstCommand, parseCommand, recogniseCommand } from '../src/parser'
 
 // https://taskwarrior.org/docs/syntax/
 
@@ -45,13 +45,14 @@ describe('recogniseCommand', () => {
     assert.equal(recogniseCommand('conf'), 'config')
   })
 })
-describe('parse', () => {
+describe('findFirstCommand', () => {
   test('16 mod something', (t) => {
     let input = '16 mod something'.split(' ')
-    let result = parse(input)
+    let result = findFirstCommand(input)
     assert.deepEqual(result, { input: 'mod', output: 'modify', index: 1 })
   })
 })
+
 describe('parseCommand', () => {
 
   test('parse: add something', (t) => {

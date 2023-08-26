@@ -85,13 +85,22 @@ export function processOne(arr: Array<any>, fn: Function): { input: string, outp
   return null
 }
 
-export function parse(tokens: string[]): { input: string, output: string, index: number } | null {
+export function findFirstCommand(tokens: string[]): { input: string, output: string, index: number } | null {
   const result = processOne(tokens, recogniseCommand)
-  if(result) {
-    console.log('result', result)
-  }
+  console.log('result', result)
   return( result ? result : null )
 }
+
+export function findIds(tokens: string[]): { indices:number[], ids:number[] } | null {
+  
+  return null
+}
+
+
+export function parse(tokens: string[], recur = true): Command | null {
+  return null
+}
+
 export function parseCommand(tokens: string[], recur = true): Command | null {
   if (tokens.length === 0) return null
   let key = recogniseCommand(tokens[0])

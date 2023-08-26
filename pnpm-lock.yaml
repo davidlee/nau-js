@@ -11,6 +11,9 @@ dependencies:
   '@effect/language-service':
     specifier: ^0.0.21
     version: 0.0.21
+  '@prisma/client':
+    specifier: ^5.2.0
+    version: 5.2.0(prisma@5.2.0)
   blessed:
     specifier: ^0.1.81
     version: 0.1.81
@@ -29,6 +32,9 @@ dependencies:
   lowdb:
     specifier: ^6.0.1
     version: 6.0.1
+  prisma-extension-bark:
+    specifier: ^0.1.1
+    version: 0.1.1(@prisma/client@5.2.0)
   zod:
     specifier: ^3.22.2
     version: 3.22.2
@@ -624,10 +630,27 @@ packages:
       fastq: 1.15.0
     dev: true
 
+  /@prisma/client@5.2.0(prisma@5.2.0):
+    resolution: {integrity: sha512-AiTjJwR4J5Rh6Z/9ZKrBBLel3/5DzUNntMohOy7yObVnVoTNVFi2kvpLZlFuKO50d7yDspOtW6XBpiAd0BVXbQ==}
+    engines: {node: '>=16.13'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      '@prisma/engines-version': 5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f
+      prisma: 5.2.0
+    dev: false
+
+  /@prisma/engines-version@5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f:
+    resolution: {integrity: sha512-jsnKT5JIDIE01lAeCj2ghY9IwxkedhKNvxQeoyLs6dr4ZXynetD0vTy7u6wMJt8vVPv8I5DPy/I4CFaoXAgbtg==}
+    dev: false
+
   /@prisma/engines@5.2.0:
     resolution: {integrity: sha512-dT7FOLUCdZmq+AunLqB1Iz+ZH/IIS1Fz2THmKZQ6aFONrQD/BQ5ecJ7g2wGS2OgyUFf4OaLam6/bxmgdOBDqig==}
     requiresBuild: true
-    dev: true
 
   /@tsconfig/node10@1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
@@ -1567,6 +1590,14 @@ packages:
     hasBin: true
     dev: true
 
+  /prisma-extension-bark@0.1.1(@prisma/client@5.2.0):
+    resolution: {integrity: sha512-S9fIHdfHHV1utCa5s9xm0Qvc2aLr32EFL4v6EGlH0l8vnbFD9Sbs22nMyXF7gI8ihpHkdGEjep2Xocr0yv+fwg==}
+    peerDependencies:
+      '@prisma/client': '>=5.0.0'
+    dependencies:
+      '@prisma/client': 5.2.0(prisma@5.2.0)
+    dev: false
+
   /prisma@5.2.0:
     resolution: {integrity: sha512-FfFlpjVCkZwrqxDnP4smlNYSH1so+CbfjgdpioFzGGqlQAEm6VHAYSzV7jJgC3ebtY9dNOhDMS2+4/1DDSM7bQ==}
     engines: {node: '>=16.13'}
@@ -1574,7 +1605,6 @@ packages:
     requiresBuild: true
     dependencies:
       '@prisma/engines': 5.2.0
-    dev: true
 
   /punycode@2.3.0:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
