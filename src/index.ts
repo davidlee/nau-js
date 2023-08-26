@@ -6,3 +6,6 @@ const input = argsFromArgv(process.argv)
 const command = parseCommand(input)
 
 console.log(command)
+
+import { e } from './entry'
+console.log(e.description)

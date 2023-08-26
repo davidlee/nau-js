@@ -70,10 +70,12 @@ export function argsFromArgv(argv: string[]): string[] {
 // https://taskwarrior.org/docs/syntax/
 // task <filter> <command> <modifications> <miscellaneous>
 export function parseCommand(tokens: string[], recur = true): Command | null {
+  if (tokens.length === 0) return null
   let key = recogniseCommand(tokens[0])
   let cmd = commands[key as keyof typeof commands]
   if (cmd) {
     if (cmd.ids !== false) {
+      if (typeof tokens[1] !== 'string') throw new Error('No task ID specified') 
       const ids = recogniseIds(tokens[1])
       if (ids) {
         const rest = tokens.slice(2)
@@ -90,7 +92,7 @@ export function parseCommand(tokens: string[], recur = true): Command | null {
         throw new Error(`No task ID specified: ${tokens[1]}`)
       }
     } else {
-      console.log('no ids')
+      // console.log('no ids')
       const rest = tokens.slice(1)
       if (validateRest(cmd.rest, rest)) {
         return {
@@ -121,13 +123,13 @@ export function recogniseCommand(word: string): string | null {
 }
 
 function recogniseIds(word: string): number[] | null {
-  console.log('ids', word,word.match(/^\d+$/))  
+  // console.log('ids', word, word.match, word.match(/^\d+$/))  
   if (word === null || word.match(/\d+/) === null) return null
 
   const chunks = word.split(',').map( chunk => {
-    console.log('ch:', chunk)
+    // console.log('ch:', chunk)
     if (chunk && chunk.match(/^[0-9]+-[0-9]+$/)) {
-      console.log('range',chunk, chunk.split('-'))
+      // console.log('range',chunk, chunk.split('-'))
       const [start, end] = chunk.split('-').map((c) => parseInt(c))
       return Array.from({ length: end - start + 1 }, (_, i) => start + i)
     } else if (chunk.match(/^\d+$/)) {
@@ -135,7 +137,7 @@ function recogniseIds(word: string): number[] | null {
     } else {
       return null  
     }})
-    console.log('chunks', chunks) 
+    // console.log('chunks', chunks) 
     return chunks.flat().filter((c) => typeof c === 'number') as number[]
   }
     
