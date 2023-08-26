@@ -3,9 +3,111 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  relationMode = "foreignKeys"
+  extensions = [citext, pgcrypto]
+  // extensions
 }
+
+
+
+// prisma/schema.prisma
+// model Tag {
+//     // Extension's internal fields
+//     id       Int    @id @default(autoincrement())
+//     path     String @unique
+//     depth    Int
+//     numchild Int    @default(0)
+    
+//     // Your fields go here...
+//     name     String @db.Citext @unique
+
+//     @@index([path])
+// }
+
+enum Status {
+  Draft
+  Clarify
+  Backlog
+  Ready
+  Next
+  InProgress
+  Blocked
+  Check
+  Done
+  Aborted
+  Reflect
+  Archive
+  Deleted
+}
+
+enum EntryType {
+  Transient
+  Task
+  SubTask
+  Project
+  Objective
+  Epic
+  Theme
+  Activity
+  Plan
+  Annotation
+}
+
+model Entry {
+  //* required by Bark *//
+  id         Int     @id @default(autoincrement())
+  path       String  @unique
+  depth      Int
+  numchild   Int     @default(0)
+
+  entryType  EntryType @default(Transient) 
+  uuid       String  @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cuid       String  @unique @default(cuid()) 
+  
+  
+  parent     Entry?  @relation("Parent", fields: [parentId], references: [id])
+  children   Entry[] @relation("Parent")
+  parentId   Int?
+  depends    Entry[] @relation("Depends")
+  dependents Entry[] @relation("Depends")
+
+  position   Int     @default(1)
+  status     Status  @default(Draft)
+  text       String
+  url        String?
+  filePath   String?
+  
+  tags       String[]
+  meta       Json    
+  
+  priority   Int     @default(0)
+  urgency    Float   @default(1.0)
+
+  due        DateTime?
+  end        DateTime?
+  scheduled  DateTime?
+  until      DateTime?
+  wait       DateTime?
+  start      DateTime?
+  
+  next       DateTime? // if recurs
+  recur      Json? // mutually exclusive with repeat
+  repeat     Json? // ...  
+
+  created    DateTime  @default(now())
+  modified   DateTime  @default(now())
+  deleted    DateTime? @default(now())
+   
+  @@index([path])
+  @@index([entryType])
+  @@index([parentId])
+  @@index([status])
+  @@index([tags])
+}
+

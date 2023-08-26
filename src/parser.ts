@@ -92,10 +92,13 @@ export function findFirstCommand(tokens: string[]): { input: string, output: str
 }
 
 export function findIds(tokens: string[]): { indices:number[], ids:number[] } | null {
-  
-  return null
+  const res = {indices:[], ids:[]}
+  tokens.forEach((el, i) => {
+    const ids = recogniseIds(el)
+    if(ids !== null){ ids.forEach( id => res.ids.push(id)) }
+  })
+  if (res.ids.length !== 0) { return res } else { return null}
 }
-
 
 export function parse(tokens: string[], recur = true): Command | null {
   return null

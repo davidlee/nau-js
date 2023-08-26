@@ -29,12 +29,12 @@
   "license": "non",
   "devDependencies": {
     "@types/argparse": "^2.0.10",
-    "@types/node": "^20.5.1",
+    "@types/node": "^20.5.6",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
-    "eslint": "^8.47.0",
+    "eslint": "^8.48.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^4.2.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "onchange": "^7.1.0",
     "pnpm": "^8.6.12",
@@ -52,8 +52,8 @@
     "date-fns": "^2.30.0",
     "esbuild": "0.19.2",
     "fp-ts": "^2.16.1",
-    "lowdb": "^6.0.1",
     "prisma-extension-bark": "^0.1.1",
+    "uuid": "^9.0.0",
     "zod": "^3.22.2"
   },
   "pnpm": {

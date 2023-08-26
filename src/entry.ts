@@ -1,16 +1,16 @@
 import { z } from "zod";
 
-function generateUUID() {
-  return "IRSETIRESNTIEI"
-}
-const StatusNames = z.enum(["DRAFT", "READY", "WIP", "DONE", "CANCELLED", "SOMEDAY", "WAITING", "TEMPLATE", "DELETED"])
+// function generateUUID() {
+//   return "IRSETIRESNTIEI"
+// }
+// const _StatusNames = z.enum(["DRAFT", "READY", "WIP", "DONE", "CANCELLED", "SOMEDAY", "WAITING", "TEMPLATE", "DELETED"])
 
-const Entry = z.object({
-  uuid: z.string().default(() => generateUUID()),
+const _Entry = z.object({
+  uuid: z.string().default(() => 'generateUUID()'),
   id: z.number(),
-  order: z.number().nullable(),
+  position: z.number().nullable(),
   status: z.string().default('DRAFT'),
-  description: z.string(),
+  text: z.string(),
   
   // string().datetime() ?
   due: z.date().nullable(),
@@ -40,10 +40,10 @@ const Entry = z.object({
 })
 
 
-export const e = Entry.parse({ id: 5, description: "hello" });
+export const e = _Entry.parse({ id: 5, text: "hello" });
 
 // extract the inferred type
-type Entry = z.infer<typeof Entry>;
+type _Entry = z.infer<typeof _Entry>;
 
 console.log(e);
 console.log(e.description);
