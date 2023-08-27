@@ -4,6 +4,7 @@ enum TokenKind {
   Command  = 'commands',
   Filter   = 'filters',
   Modifier = 'modifiers',
+  Ids      = 'filters.ids',
 }
 
 export type Command = {
@@ -63,34 +64,38 @@ export type CommandList = {
  [key: string]: Command 
 }
 
-interface State {
-  tokens:    string[],
-  processedIndices: TokenKind[],
+export interface ParsedCommand {
   filters: {
-    ids:     number[],
-    tags:    string[],
-    words:   string[], 
+    ids:       number[],
+    tags:      string[],
+    words:     string[], 
   },
-  command:   string[],
+  command:     string[],
+  subcommands: string[],
   modifiers: {
-    tags:    string[],
-    words:   string[],
+    tags:      string[],
+    words:     string[],
   }
+}
+interface State extends ParsedCommand{
+  tokens:      string[],
+  processedIndices: TokenKind[],
 }
 
 function buildState(tokens: string[]): State {
   return {
-    tokens: tokens,
-    command: [],
+    tokens:           tokens,
+    command:          [],
+    subcommands:      [],
     processedIndices: [],
     filters:{
-      ids:   [],
-      tags:  [],
-      words: [], 
+      ids:            [],
+      tags:           [],
+      words:          [], 
     },
     modifiers: {
-      tags:  [],
-      words: [],
+      tags:           [],
+      words:          [],
     }
   } as State
 }
@@ -145,21 +150,7 @@ function recogniseIds(word: string): number[] | null {
   })
   return chunks.flat().filter((c) => typeof c === 'number') as number[]
 }
-export function findCommand(state:State): boolean {
-  
-  return false
-}
 
-type IdsFound = {ids: number[], indices: number[]} 
-
-export function findIds(tokens: string[]): IdsFound | null {
-  const res: IdsFound = {indices: [], ids: []}
-  tokens.forEach((el, i) => {
-    const ids = recogniseIds(el)
-    if(ids !== null){ ids.forEach( id => res.ids.push(id)) }
-  })
-  if (res.ids.length !== 0) { return res } else { return null}
-}
 
 // https://taskwarrior.org/docs/syntax/
 // task <filter> <command> <modifications> <miscellaneous>
@@ -168,7 +159,7 @@ export function findIds(tokens: string[]): IdsFound | null {
   // everything before it is a filter (ids, etc)
   // everything after it is a modification
 
-export function parse(tokens: string[]): Command | null {
+export function parse(tokens: string[]): State | Error {
   let state = buildState(tokens)
 
   for(let i = 0; i < tokens.length; i++) {
@@ -176,25 +167,20 @@ export function parse(tokens: string[]): Command | null {
     const command: Command | null = recogniseCommand(word)
 
     if(command) {
-      if(command.subcommands.length > 0) { // FIXME track n
-        
-      }
-      
-    } 
+      // if(command.subcommands.length > 0)  // FIXME track depth
+      state.processedIndices[i] = TokenKind.Command
+      state.command.push(command.name)
+      break // FIXME subcommands
+    }
   }
   
-  if(state.command.length === 0) {
-    // entries before are filters
-    // entries after are modifications
-
-    // classify each with a regexp match, then process
-    
-  } else {
-    // try to find a report, etc
-
-    // otherwise we're doing a list and treating input as filters
-  }
-  return null
+  // if(state.command.length === 0) {
+  // } else {
+  //   // try to find a report, etc
+  //   // otherwise we're doing a list and treating input as filters
+  //   state.command
+  // }
+  return state
 }
 
     
