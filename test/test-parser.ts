@@ -45,10 +45,10 @@ describe('recogniseCommand', () => {
     assert.equal(recogniseCommand('conf'), 'config')
   })
 })
-describe('findFirstCommand', () => {
+describe('findCommand', () => {
   test('16 mod something', (t) => {
     let input = '16 mod something'.split(' ')
-    let result = findFirstCommand(input)
+    let result = findCommand(input)
     assert.deepEqual(result, { input: 'mod', output: 'modify', index: 1 })
   })
 })

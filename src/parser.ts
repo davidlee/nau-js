@@ -1,7 +1,6 @@
-import { parseArgs } from 'node:util'
+// import { parseArgs } from 'node:util'
 import * as O from 'fp-ts/Option'
 import { pipe } from 'fp-ts/pipeable'
-import { validateHeaderName } from 'node:http'
 
 export type Command = {
   name: string
@@ -113,9 +112,7 @@ interface State {
 }
 
 let state = {
-  tokens: tokens,
-  command: value
-  
+  tokens: [],
 }
 
 
