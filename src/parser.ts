@@ -23,7 +23,8 @@ const aliases = {
   cfg: 'config',
 }
 
-const commands = {
+
+const commands = Object.freeze({
   add: {
     ids: false,
     rest: NumArgs.OneOrMore,
@@ -59,7 +60,7 @@ const commands = {
     ids: null,
     rest: NumArgs.Any,
   },
-}
+})
 
 const commandNames = Object.keys(commands)
 
@@ -74,8 +75,9 @@ export function argsFromArgv(argv: string[]): string[] {
   // everything before it is a filter (ids, etc)
   // everything after it is a modification
 
+type TokenProcessingResult = { input: string, output: string, index: number }
 
-export function processOne(arr: Array<any>, fn: Function): { input: string, output: string, index: number } | null {
+export function processOne(arr: Array<any>, fn: Function): TokenProcessingResult | null {
   for(let i = 0; i < arr.length; i++) {
     const result = fn(arr[i])
     if (result) {
@@ -85,14 +87,48 @@ export function processOne(arr: Array<any>, fn: Function): { input: string, outp
   return null
 }
 
-export function findFirstCommand(tokens: string[]): { input: string, output: string, index: number } | null {
+export function _findFirstCommand(tokens: string[]): TokenProcessingResult | null {
   const result = processOne(tokens, recogniseCommand)
   console.log('result', result)
   return( result ? result : null )
 }
 
-export function findIds(tokens: string[]): { indices:number[], ids:number[] } | null {
-  const res = {indices:[], ids:[]}
+enum PropType {
+  CommandValue,
+  FilterValue,
+  ModifierValue,
+}
+
+interface Prop {
+  readonly type: PropType,
+  index?: number,
+  input?: string,
+  output?: any
+}
+
+interface State {
+  tokens: string[],
+  ids: number[],
+  commandName: string,
+}
+
+let state = {
+  tokens: tokens,
+  command: value
+  
+}
+
+
+export function findCommand(state:State): boolean {
+  
+  return false
+}
+
+
+type IdsFound = {ids: number[], indices: number[]} 
+
+export function findIds(tokens: string[]): IdsFound | null {
+  const res: IdsFound = {indices: [], ids: []}
   tokens.forEach((el, i) => {
     const ids = recogniseIds(el)
     if(ids !== null){ ids.forEach( id => res.ids.push(id)) }
@@ -100,7 +136,19 @@ export function findIds(tokens: string[]): { indices:number[], ids:number[] } | 
   if (res.ids.length !== 0) { return res } else { return null}
 }
 
-export function parse(tokens: string[], recur = true): Command | null {
+export function parse(tokens: string[]): Command | null {
+  const cmdRes = findCommand(tokens)
+  if(cmdRes) {
+    // entries before are filters
+    // entries after are modifications
+
+    // classify each with a regexp match, then process
+    
+  } else {
+    // try to find a report, etc
+
+    // otherwise we're doing a list and treating input as filters
+  }
   return null
 }
 

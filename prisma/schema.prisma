@@ -14,49 +14,67 @@ datasource db {
   // extensions
 }
 
+model Tag {
+  //* required by Bark *//
+  id       Int    @id @default(autoincrement())
+  path     String @unique
+  depth    Int
+  numchild Int    @default(0)
+  
+  //* relation's own fields *//
+  name     String  @db.Citext @unique
+  group    String  @db.Citext @default("default")
 
+  entries  Entry[]
 
-// prisma/schema.prisma
-// model Tag {
-//     // Extension's internal fields
-//     id       Int    @id @default(autoincrement())
-//     path     String @unique
-//     depth    Int
-//     numchild Int    @default(0)
-    
-//     // Your fields go here...
-//     name     String @db.Citext @unique
+  @@index([path])
+  @@index([name, group])
+}
 
-//     @@index([path])
-// }
+model Node {
+  //* required by Bark *//
+  id       Int    @id @default(autoincrement())
+  path     String @unique
+  depth    Int
+  numchild Int    @default(0)
+
+  //* relation's own fields *//
+  cuid     String  @unique @default(cuid()) 
+  entry    Entry?  @relation("EntryNode")
+}
 
 enum Status {
+  Capture
   Draft
+  Rework
   Clarify
+  Incubate
   Backlog
+  Icebox
+  
   Ready
   Next
-  InProgress
-  Blocked
+  Started
   Check
   Done
-  Aborted
   Reflect
+  
+  Stalled
+  Aborted
   Archive
   Deleted
 }
 
 enum EntryType {
   Transient
-  Task
-  SubTask
-  Project
+  Note
+  // Domain  
+  Area
   Objective
-  Epic
-  Theme
-  Activity
-  Plan
-  Annotation
+  Project
+  Task
+  // Plan
+  // Activity
 }
 
 model Entry {
@@ -68,23 +86,26 @@ model Entry {
 
   entryType  EntryType @default(Transient) 
   uuid       String  @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  cuid       String  @unique @default(cuid()) 
+  cuid       String  @unique @default(cuid())
   
+  node Node @relation("EntryNode", fields: [nodeId], references: [id])
+  nodeId     Int     @unique
   
   parent     Entry?  @relation("Parent", fields: [parentId], references: [id])
   children   Entry[] @relation("Parent")
   parentId   Int?
   depends    Entry[] @relation("Depends")
   dependents Entry[] @relation("Depends")
+  tags       Tag[]   
+  updates    EntryUpdate[] @relation("EntryUpdates")
 
+  meta       Json?
   position   Int     @default(1)
   status     Status  @default(Draft)
   text       String
   url        String?
   filePath   String?
   
-  tags       String[]
-  meta       Json    
   
   priority   Int     @default(0)
   urgency    Float   @default(1.0)
@@ -96,9 +117,10 @@ model Entry {
   wait       DateTime?
   start      DateTime?
   
-  next       DateTime? // if recurs
-  recur      Json? // mutually exclusive with repeat
-  repeat     Json? // ...  
+  cfgRecur   Json? // mutually exclusive with repeat
+  cfgRepeat  Json? // ...  
+  cfgReview  Json? // for SRI / incr. writing
+  jobAt      DateTime? // cron / workers need to process recurrence / review
 
   created    DateTime  @default(now())
   modified   DateTime  @default(now())
@@ -108,6 +130,12 @@ model Entry {
   @@index([entryType])
   @@index([parentId])
   @@index([status])
-  @@index([tags])
-}
+}  
 
+model EntryUpdate {
+  id         String  @id @default(cuid())
+  created    DateTime  @default(now())
+  changes    Json
+  entry      Entry   @relation("EntryUpdates", fields: [entryId], references: [id])
+  entryId    Int 
+}

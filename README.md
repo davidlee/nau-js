@@ -19,3 +19,48 @@ Less moo. More milk.
 - simple.
 - plugin system: users can extend with JS / TS; user definitions are as powerful as built ins
 - separation of concerns. multiple front ends
+
+
+## status
+
+entry(*)
+- archived
+- deleted
+
+entry(transient)
+- capture
+- clarify
+- incubate
+
+entry(note, idea, annotation)
+- draft
+- rework
+- incubate
+- archived
+- deleted
+
+entry(task)
+- clarify
+- incubate
+- backlog
+- icebox
+- ready
+- next
+- started
+- stalled
+- check
+- done 
+- aborted
+- reflect
+
+  +blocked
+  +waiting 
+
+entry(project) < task
+
+entry(Area)
+- active
+- inactive
+
+entry(Objective) ??
+ 
