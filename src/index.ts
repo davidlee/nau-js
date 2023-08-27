@@ -9,5 +9,5 @@ const command = parseCommand(input)
 console.log(command)
 
 
-// import { e } from './entry'
-// console.log(e.text)
+import { e } from './entry'
+console.log(e.text)
