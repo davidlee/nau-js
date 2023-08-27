@@ -5,31 +5,66 @@ import { z } from "zod";
 // }
 // const _StatusNames = z.enum(["DRAFT", "READY", "WIP", "DONE", "CANCELLED", "SOMEDAY", "WAITING", "TEMPLATE", "DELETED"])
 
-const _Entry = z.object({
-  uuid: z.string().default(() => 'generateUUID()'),
+const StatusNames = z.enum([
+  'Capture',
+  'Draft',
+  'Rework',
+  'Clarify',
+  'Incubate',
+  'Backlog',
+  'Icebox',
+ 
+  'Ready',
+  'Next',
+  'Started',
+  'Check',
+  'Done',
+  'Reflect',
+ 
+  'Stalled',
+  'Aborted',
+  'Archive',
+  'Deleted',
+])
+type StatusNames = z.infer<typeof StatusNames>
+
+const EntryTypes = z.enum([
+  'Transient',
+  'Note',
+  'Area',
+  'Objective',
+  'Project',
+  'Task',
+])
+type EntryTypes = z.infer<typeof EntryTypes>
+
+const Entry = z.object({
+  uid: z.string().default(() => 'generateUUID()'),
   id: z.number(),
+  path: z.array(z.string()).default([]),
+
+  type: z.string().default(EntryTypes.enum.Transient),
+  status: z.string().default(StatusNames.enum.Draft),
   position: z.number().nullable(),
-  status: z.string().default('DRAFT'),
   text: z.string(),
   
-  // string().datetime() ?
-  due: z.date().nullable(),
-  end: z.date().nullable(),
+  due:       z.date().nullable(),
+  end:       z.date().nullable(),
   scheduled: z.date().nullable(),
-  until: z.date().nullable(),
-  wait: z.date().nullable(),
-  start: z.date().nullable(),
+  until:     z.date().nullable(),
+  wait:      z.date().nullable(),
+  start:     z.date().nullable(),
   
-  priority: z.number().nullable(),
-  urgency: z.number().default(1.0),
+  priority:  z.number().nullable(),
+  urgency:   z.number().default(1.0),
   
-  parent: z.string().nullable(),
+  parent:    z.string().nullable(),
   
-  tags: z.array(z.string()).default([]),
-  metadata: z.record(z.string()).default({}),
+  tags:      z.array( z.string()).default([]),
+  metadata:  z.record(z.string()).default({}),
 
-  created: z.date().default(() => new Date()),
-  modified: z.date().default(() => new Date()),
+  created:   z.date().default(() => new Date()),
+  modified:  z.date().default(() => new Date()),
 }).partial().required({
   id: true,
   uuid: true,
@@ -40,13 +75,13 @@ const _Entry = z.object({
 })
 
 
-export const e = _Entry.parse({ id: 5, text: "hello" });
+export const e = Entry.parse({ id: 5, text: "hello" });
 
 // extract the inferred type
-type _Entry = z.infer<typeof _Entry>;
+type Entry = z.infer<typeof Entry>;
 
 console.log(e);
-console.log(e.description);
+console.log(e.text);
 
 
 /*

@@ -1,121 +1,133 @@
-// import { parseArgs } from 'node:util'
-import * as O from 'fp-ts/Option'
-import { pipe } from 'fp-ts/pipeable'
+import * as R from 'ramda'
+
+enum TokenKind {
+  Command  = 'commands',
+  Filter   = 'filters',
+  Modifier = 'modifiers',
+}
 
 export type Command = {
-  name: string
-  ids?: number[]
-  rest?: string[]
+  name:        string,
+  aliases:     string[],
+  expect:      ArgKind[],
+  subcommands: Command[],
 }
 
-enum NumArgs {
-  None,
-  NoneOrOne,
-  One,
-  OneOrMore,
-  Any,
+export type CommandList = {
+ [key: string]: Command 
 }
 
-const aliases = {
-  rm: 'remove',
-  '@': 'context',
-  cfg: 'config',
-}
-
-
-const commands = Object.freeze({
+const Commands: CommandList = {
   add: {
-    ids: false,
-    rest: NumArgs.OneOrMore,
+    name: 'add',
+    aliases: [],
+    expect: [TokenKind.Modifier],
+    subcommands: []
   },
   modify: {
-    ids: true,
-    rest: NumArgs.OneOrMore,
+    name: 'modify',
+    aliases: [],
+    expect: [TokenKind.Filter, TokenKind.Modifier],
+    subcommands: []
   },
   remove: {
-    ids: true,
-    rest: NumArgs.None,
+    name: 'remove',
+    aliases: ['rm'],
+    expect: [TokenKind.Filter],
+    subcommands: []
   },
   context: {
-    ids: false,
-    rest: NumArgs.One,
+    name: 'context',
+    aliases: ['@'],
+    expect: [TokenKind.Modifier],
+    subcommands: []
   },
   done: {
-    ids: true,
-    rest: NumArgs.None,
+    name: 'done',
+    aliases: ['x'],
+    expect: [TokenKind.Filter],
+    subcommands: []
   },
   undo: {
-    ids: true,
-    rest: NumArgs.None,
+    name: 'undo',
+    aliases: [],
+    expect: [TokenKind.Filter],
+    subcommands: []
   },
   config: {
-    ids: true,
-    rest: NumArgs.OneOrMore,
-    subcommands: [
-      //
-    ],
+    name: 'config',
+    aliases: ['cfg'],
+    expect: [TokenKind.Modifier],
+    subcommands: [] // ...
   },
-  _default: {
-    ids: null,
-    rest: NumArgs.Any,
-  },
+}
+const CommandNames = Object.keys(Commands)
+
+const CommandAliases: CommandList = {}
+CommandNames.forEach( key => {
+  Commands[key].aliases.forEach( alias => {
+    CommandAliases[alias] = Commands[key]
+  })
 })
 
-const commandNames = Object.keys(commands)
+interface State {
+  tokens:    string[],
+  processedIndices: TokenKind[],
+  filters: {
+    ids:     number[],
+    tags:    string[],
+    words:   string[], 
+  },
+  command:   string[],
+  modifiers: {
+    tags:    string[],
+    words:   string[],
+  }
+}
 
 export function argsFromArgv(argv: string[]): string[] {
   return argv.slice(2).filter((arg) => !(arg === '--'))
 }
 
-// https://taskwarrior.org/docs/syntax/
-// task <filter> <command> <modifications> <miscellaneous>
+//
+// matchers
+//
 
-// first, find the first thing that looks like a command
-  // everything before it is a filter (ids, etc)
-  // everything after it is a modification
+export function recogniseCommand(word: string): Command | null {
+  // check for exact matches of any aliases, they're simple
+  let aliasedCommand: Command | null = CommandAliases[word]
+  if (aliasedCommand) return aliasedCommand
+    
+  // otherwise, check for a partial unique match of any command
+  const rx = new RegExp('^' + word)
+  const matches = CommandNames.filter((name) => name.match(rx))
 
-type TokenProcessingResult = { input: string, output: string, index: number }
-
-export function processOne(arr: Array<any>, fn: Function): TokenProcessingResult | null {
-  for(let i = 0; i < arr.length; i++) {
-    const result = fn(arr[i])
-    if (result) {
-      return { input: arr[i], output: result, index: i }
-    }
-  }
-  return null
+  if(matches.length === 1) { // *unique* match 
+    return Commands[matches[0]]
+  } else return null
 }
 
-export function _findFirstCommand(tokens: string[]): TokenProcessingResult | null {
-  const result = processOne(tokens, recogniseCommand)
-  console.log('result', result)
-  return( result ? result : null )
+// [3,5] -> [3,4,5]
+function unrollIntRange(range: number[]): number[] {
+  return Array.from({ length: range[0] - range[1] + 1 }, (_, i) => range[0] + i)
 }
 
-enum PropType {
-  CommandValue,
-  FilterValue,
-  ModifierValue,
+// parse a comma-separated list of ints, or ranges of ints, eg:
+// 8,9-11,16,3 -> [8,9,10,11,16,3]
+function recogniseIds(word: string): number[] | null {
+  if (!word) return null
+
+  const chunks = word.split(',').map( chunk => {
+    if (chunk.match(/^[0-9]+-[0-9]+$/)) {
+      // we have a range - unroll it
+      return unrollIntRange(chunk.split('-').map((c) => parseInt(c)))
+    } else if (chunk.match(/^\d+$/)) {
+      // just a number
+      return parseInt(chunk)
+    } else return null  
+  })
+  return chunks.flat().filter((c) => typeof c === 'number') as number[]
 }
-
-interface Prop {
-  readonly type: PropType,
-  index?: number,
-  input?: string,
-  output?: any
-}
-
-interface State {
-  tokens: string[],
-  ids: number[],
-  commandName: string,
-}
-
-let state = {
-  tokens: [],
-}
-
-
 export function findCommand(state:State): boolean {
   
   return false
@@ -133,9 +145,40 @@ export function findIds(tokens: string[]): IdsFound | null {
   if (res.ids.length !== 0) { return res } else { return null}
 }
 
+function buildState(tokens: string[]): State {
+  return {
+    tokens: tokens,
+    command: [],
+    processedIndices: [],
+    filters:{
+      ids:   [],
+      tags:  [],
+      words: [], 
+    },
+    modifiers: {
+      tags:  [],
+      words: [],
+    }
+  } as State
+}
+
+// https://taskwarrior.org/docs/syntax/
+// task <filter> <command> <modifications> <miscellaneous>
+
+  // first, find the first thing that looks like a command
+  // everything before it is a filter (ids, etc)
+  // everything after it is a modification
+
 export function parse(tokens: string[]): Command | null {
-  const cmdRes = findCommand(tokens)
-  if(cmdRes) {
+  let state = buildState(tokens)
+
+  tokens.forEach((word, i) => {
+    if (1){
+      
+    } 
+  })
+  
+  if(state.command.length === 0) {
     // entries before are filters
     // entries after are modifications
 
@@ -149,94 +192,4 @@ export function parse(tokens: string[]): Command | null {
   return null
 }
 
-export function parseCommand(tokens: string[], recur = true): Command | null {
-  if (tokens.length === 0) return null
-  let key = recogniseCommand(tokens[0])
-  let cmd = commands[key as keyof typeof commands]
-  if (cmd) {
-    if (cmd.ids !== false) {
-      if (typeof tokens[1] !== 'string') throw new Error('No task ID specified') 
-      const ids = recogniseIds(tokens[1])
-      if (ids) {
-        const rest = tokens.slice(2)
-        if (validateRest(cmd.rest, rest)) {
-          return {
-            name: key as string,
-            ids: ids,
-            rest: rest,
-          }
-        } else {
-          throw new Error(`Wrong number of arguments: ${rest}`)
-        }
-      } else {
-        throw new Error(`No task ID specified: ${tokens[1]}`)
-      }
-    } else {
-      // console.log('no ids')
-      const rest = tokens.slice(1)
-      if (validateRest(cmd.rest, rest)) {
-        return {
-          name: key as string,
-          rest: rest,
-        }
-      } else {
-        throw new Error(`Wrong number of arguments: ${rest}`)
-      }
-    }
-  } else if (recur) {
-    // console.log('no command')
-    const [first, second, ...rest] = tokens
-    return parseCommand([second, first, ...rest], false)
-  } else {
-    // we tried
-    return null
-  }
-}
-
-export function recogniseCommand(word: string): string | null {
-  if (word in aliases) return aliases[word as keyof typeof aliases]
-  const matches = commandNames.filter((name) =>
-    name.match(new RegExp('^' + word)),
-  )
-  // if (matches.length > 0) console.log(matches)
-  return matches.length === 1 ? matches[0] : null
-}
-
-function recogniseIds(word: string): number[] | null {
-  // console.log('ids', word, word.match, word.match(/^\d+$/))  
-  if (word === null || word.match(/\d+/) === null) return null
-
-  const chunks = word.split(',').map( chunk => {
-    // console.log('ch:', chunk)
-    if (chunk && chunk.match(/^[0-9]+-[0-9]+$/)) {
-      // console.log('range',chunk, chunk.split('-'))
-      const [start, end] = chunk.split('-').map((c) => parseInt(c))
-      return Array.from({ length: end - start + 1 }, (_, i) => start + i)
-    } else if (chunk.match(/^\d+$/)) {
-      return parseInt(chunk)
-    } else {
-      return null  
-    }})
-    // console.log('chunks', chunks) 
-    return chunks.flat().filter((c) => typeof c === 'number') as number[]
-  }
     
-
-function validateRest(req: NumArgs, words: string[]) {
-  switch (req) {
-    case NumArgs.None:
-      return true 
-      // return words.length === 0
-    case NumArgs.NoneOrOne:
-      return true
-      // return words.length <= 1
-    case NumArgs.One:
-      return words.length !== 0
-      // return words.length === 1
-    case NumArgs.OneOrMore:
-      return words.length !== 0
-      // return words.length >= 1
-    case NumArgs.Any:
-      return true
-  }
-}
