@@ -39,14 +39,14 @@ const EntryTypes = z.enum([
 type EntryTypes = z.infer<typeof EntryTypes>
 
 const Entry = z.object({
-  uid: z.string().default(() => 'generateUUID()'),
-  id: z.number(),
-  path: z.array(z.string()).default([]),
+  uid:       z.string().default(() => 'generateUUID()'),
+  id:        z.number(),
+  path:      z.array( z.string()).default([]),
 
-  type: z.string().default(EntryTypes.enum.Transient),
-  status: z.string().default(StatusNames.enum.Draft),
-  position: z.number().nullable(),
-  text: z.string(),
+  type:      z.string().default(EntryTypes.enum.Transient),
+  status:    z.string().default(StatusNames.enum.Draft),
+  position:  z.number().nullable(),
+  text:      z.string(),
   
   due:       z.date().nullable(),
   end:       z.date().nullable(),

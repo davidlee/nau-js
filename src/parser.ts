@@ -9,66 +9,59 @@ enum TokenKind {
 export type Command = {
   name:        string,
   aliases:     string[],
-  expect:      ArgKind[],
+  expect:      TokenKind[],
   subcommands: Command[],
 }
 
-export type CommandList = {
- [key: string]: Command 
-}
-
-const Commands: CommandList = {
-  add: {
+const Commands: Command[] = [
+  {
     name: 'add',
     aliases: [],
     expect: [TokenKind.Modifier],
     subcommands: []
   },
-  modify: {
+  {
     name: 'modify',
     aliases: [],
     expect: [TokenKind.Filter, TokenKind.Modifier],
     subcommands: []
   },
-  remove: {
+  {
     name: 'remove',
     aliases: ['rm'],
     expect: [TokenKind.Filter],
     subcommands: []
   },
-  context: {
+  {
     name: 'context',
     aliases: ['@'],
     expect: [TokenKind.Modifier],
     subcommands: []
   },
-  done: {
+  {
     name: 'done',
     aliases: ['x'],
     expect: [TokenKind.Filter],
     subcommands: []
   },
-  undo: {
+  {
     name: 'undo',
     aliases: [],
     expect: [TokenKind.Filter],
     subcommands: []
   },
-  config: {
+  {
     name: 'config',
     aliases: ['cfg'],
     expect: [TokenKind.Modifier],
     subcommands: [] // ...
   },
-}
-const CommandNames = Object.keys(Commands)
+]
+const CommandNames = Commands.map(el => el.name)
 
-const CommandAliases: CommandList = {}
-CommandNames.forEach( key => {
-  Commands[key].aliases.forEach( alias => {
-    CommandAliases[alias] = Commands[key]
-  })
-})
+export type CommandList = {
+ [key: string]: Command 
+}
 
 interface State {
   tokens:    string[],
@@ -85,26 +78,50 @@ interface State {
   }
 }
 
+function buildState(tokens: string[]): State {
+  return {
+    tokens: tokens,
+    command: [],
+    processedIndices: [],
+    filters:{
+      ids:   [],
+      tags:  [],
+      words: [], 
+    },
+    modifiers: {
+      tags:  [],
+      words: [],
+    }
+  } as State
+}
+
 export function argsFromArgv(argv: string[]): string[] {
   return argv.slice(2).filter((arg) => !(arg === '--'))
 }
 
+function commandAliases(cmds: Command[] = Commands): CommandList {
+  const o: CommandList= {}
+  cmds.map(c => c.aliases.forEach(alias => {o[alias] = c}))
+  return o
+}
 //
 // matchers
 //
 
-export function recogniseCommand(word: string): Command | null {
-  // check for exact matches of any aliases, they're simple
-  let aliasedCommand: Command | null = CommandAliases[word]
-  if (aliasedCommand) return aliasedCommand
+export function recogniseCommand(word: string, candidates = Commands): Command | null {
+  // check for exact matches of any aliases first:
+  const aliases = commandAliases(candidates)
+  if (Object.keys(aliases).includes(word)) return aliases[word] 
+  // let aliasedCommand: Command | null = aliases[word]
+  // if (aliasedCommand) return aliasedCommand
     
   // otherwise, check for a partial unique match of any command
   const rx = new RegExp('^' + word)
-  const matches = CommandNames.filter((name) => name.match(rx))
-
-  if(matches.length === 1) { // *unique* match 
-    return Commands[matches[0]]
-  } else return null
+  const matches = candidates.filter(el => el.name.match(rx))
+  
+  if(matches.length === 1) // *unique* match 
+    return matches[0]
+  else return null
 }
 
 // [3,5] -> [3,4,5]
@@ -133,7 +150,6 @@ export function findCommand(state:State): boolean {
   return false
 }
 
-
 type IdsFound = {ids: number[], indices: number[]} 
 
 export function findIds(tokens: string[]): IdsFound | null {
@@ -143,23 +159,6 @@ export function findIds(tokens: string[]): IdsFound | null {
     if(ids !== null){ ids.forEach( id => res.ids.push(id)) }
   })
   if (res.ids.length !== 0) { return res } else { return null}
-}
-
-function buildState(tokens: string[]): State {
-  return {
-    tokens: tokens,
-    command: [],
-    processedIndices: [],
-    filters:{
-      ids:   [],
-      tags:  [],
-      words: [], 
-    },
-    modifiers: {
-      tags:  [],
-      words: [],
-    }
-  } as State
 }
 
 // https://taskwarrior.org/docs/syntax/
@@ -172,11 +171,17 @@ function buildState(tokens: string[]): State {
 export function parse(tokens: string[]): Command | null {
   let state = buildState(tokens)
 
-  tokens.forEach((word, i) => {
-    if (1){
+  for(let i = 0; i < tokens.length; i++) {
+    const word = tokens[i]
+    const command: Command | null = recogniseCommand(word)
+
+    if(command) {
+      if(command.subcommands.length > 0) { // FIXME track n
+        
+      }
       
     } 
-  })
+  }
   
   if(state.command.length === 0) {
     // entries before are filters
