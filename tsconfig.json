@@ -10,7 +10,7 @@
     "allowJs": true,    
     "checkJs": false, 
     "moduleResolution": "node",
-    "types": ["node", "argParse","fp-ts"],
+    "types": ["node", "argParse","ramda"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "plugins": [

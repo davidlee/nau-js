@@ -38,7 +38,7 @@ const EntryTypes = z.enum([
 ])
 type EntryTypes = z.infer<typeof EntryTypes>
 
-const Entry = z.object({
+export const Entry = z.object({
   uid:       z.string().default(() => 'generateUUID()'),
   id:        z.number(),
   path:      z.array( z.string()).default([]),

@@ -1,4 +1,8 @@
-import * as R from 'ramda'
+// import * as R from 'ramda'
+
+export function argsFromArgv(argv: string[]): string[] {
+  return argv.slice(2) // .filter((arg) => !(arg === '--'))
+}
 
 enum TokenKind {
   Command  = 'commands',
@@ -7,14 +11,14 @@ enum TokenKind {
   Ids      = 'filters.ids',
 }
 
-export type Command = {
+export type CommandConfig = {
   name:        string,
   aliases:     string[],
   expect:      TokenKind[],
-  subcommands: Command[],
+  subcommands: CommandConfig[],
 }
 
-const Commands: Command[] = [
+const CommandConfigs: CommandConfig[] = Object.freeze([
   {
     name: 'add',
     aliases: [],
@@ -57,36 +61,37 @@ const Commands: Command[] = [
     expect: [TokenKind.Modifier],
     subcommands: [] // ...
   },
-]
-const CommandNames = Commands.map(el => el.name)
+])
+// const CommandConfigNames = CommandConfigs.map(el => el.name)
 
-export type CommandList = {
- [key: string]: Command 
+export type CommandConfigList = {
+ [key: string]: CommandConfig 
 }
 
-export interface ParsedCommand {
+// Zod? ValidCommandConfig?
+export type ParsedCommand = {
   filters: {
     ids:       number[],
     tags:      string[],
     words:     string[], 
   },
   command:     string[],
-  subcommands: string[],
   modifiers: {
     tags:      string[],
     words:     string[],
   }
 }
-interface State extends ParsedCommand{
+type ParsingState = {
   tokens:      string[],
   processedIndices: TokenKind[],
 }
+
+type State = ParsingState & ParsedCommand
 
 function buildState(tokens: string[]): State {
   return {
     tokens:           tokens,
     command:          [],
-    subcommands:      [],
     processedIndices: [],
     filters:{
       ids:            [],
@@ -100,12 +105,45 @@ function buildState(tokens: string[]): State {
   } as State
 }
 
-export function argsFromArgv(argv: string[]): string[] {
-  return argv.slice(2).filter((arg) => !(arg === '--'))
+function extractCommand(state:State): ParsedCommand {
+  // return { 
+  //   filters:   state.filters,
+  //   command:   state.command,
+  //   modifiers: state.modifiers,
+  // } as ParsedCommand
+
+  const { tokens, processedIndices, ...parsed } = state
+  return parsed 
 }
 
-function commandAliases(cmds: Command[] = Commands): CommandList {
-  const o: CommandList= {}
+// https://taskwarrior.org/docs/syntax/
+// task <filter> <command> <modifications> <miscellaneous>
+
+  // first, find the first thing that looks like a command
+  // everything before it is a filter (ids, etc)
+  // everything after it is a modification
+
+export function parse(tokens: string[]): ParsedCommand | Error {
+  let state = buildState(tokens)
+
+  for(let i = 0; i < tokens.length; i++) {
+    const word = tokens[i]
+    const command: CommandConfig | null = recogniseCommand(word)
+
+    if(command) {
+      // if(command.subcommands.length > 0)  // FIXME track depth
+      state.processedIndices[i] = TokenKind.Command
+      state.command.push(command.name)
+      break // FIXME subcommands
+    }
+  }
+  
+  return extractCommand(state as State)
+}
+
+
+function commandAliases(cmds: CommandConfig[] = CommandConfigs): CommandConfigList {
+  const o: CommandConfigList= {}
   cmds.map(c => c.aliases.forEach(alias => {o[alias] = c}))
   return o
 }
@@ -113,12 +151,12 @@ function commandAliases(cmds: Command[] = Commands): CommandList {
 // matchers
 //
 
-export function recogniseCommand(word: string, candidates = Commands): Command | null {
+export function recogniseCommand(word: string, candidates = CommandConfigs): CommandConfig | null {
   // check for exact matches of any aliases first:
   const aliases = commandAliases(candidates)
   if (Object.keys(aliases).includes(word)) return aliases[word] 
-  // let aliasedCommand: Command | null = aliases[word]
-  // if (aliasedCommand) return aliasedCommand
+  // let aliasedCommandConfig: CommandConfig | null = aliases[word]
+  // if (aliasedCommandConfig) return aliasedCommandConfig
     
   // otherwise, check for a partial unique match of any command
   const rx = new RegExp('^' + word)
@@ -152,35 +190,5 @@ function recogniseIds(word: string): number[] | null {
 }
 
 
-// https://taskwarrior.org/docs/syntax/
-// task <filter> <command> <modifications> <miscellaneous>
-
-  // first, find the first thing that looks like a command
-  // everything before it is a filter (ids, etc)
-  // everything after it is a modification
-
-export function parse(tokens: string[]): State | Error {
-  let state = buildState(tokens)
-
-  for(let i = 0; i < tokens.length; i++) {
-    const word = tokens[i]
-    const command: Command | null = recogniseCommand(word)
-
-    if(command) {
-      // if(command.subcommands.length > 0)  // FIXME track depth
-      state.processedIndices[i] = TokenKind.Command
-      state.command.push(command.name)
-      break // FIXME subcommands
-    }
-  }
-  
-  // if(state.command.length === 0) {
-  // } else {
-  //   // try to find a report, etc
-  //   // otherwise we're doing a list and treating input as filters
-  //   state.command
-  // }
-  return state
-}
 
     

@@ -1,0 +1,28 @@
+# d2 --sketch depends.d2 --watch depends.svg && open -a Arc depends.svg
+app
+parser
+dispatcher
+commandHandler
+entry_repo
+entry
+data_store_adapter
+
+app -> parser
+app -> dispatcher {style.stroke-dash: 5}
+app -> dataLoader
+app -> UI
+
+
+dataLoader -> commandHandler
+dataLoader -> config
+dataLoader -> dispatcher
+dataLoader -> entry_repo
+dataLoader -> entry
+dataLoader -> data_store_adapter
+
+
+dispatcher -> commandHandler {style.stroke-dash: 5}
+commandHandler -> entry_repo {style.stroke-dash: 5}
+entry_repo -> entry    {style.stroke-dash: 5}
+entry_repo -> data_store_adapter {style.stroke-dash: 5}
+

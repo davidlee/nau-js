@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
-import { parse, findCommand, recogniseCommand, ParsedCommand} from '../src/parser'
+import { parse, recogniseCommand, ParsedCommand} from '../src/parser'
 
 // https://taskwarrior.org/docs/syntax/
 
