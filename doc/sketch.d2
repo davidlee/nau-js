@@ -1,3 +1,4 @@
+# d2 --sketch sketch.d2 sketch.svg --watch
 shape: sequence_diagram
 app -> parser: parse CLI arguments ("add a note")
 parser -> app: return ParsedCommand(!add, ...)
@@ -9,4 +10,5 @@ entry -> entry_repository
 entry_repository -> data_store_adapter
 data_store_adapter -> entry_repository -> creator -> app
 
-
+entry_reader -> entry_repository
+entry_writer -> entry_repository

@@ -5,7 +5,11 @@ import * as R from './entryRepository'
 // import * as E from './entry'
 import * as F from './fileStoreAdapter'
 
-const adapter    = new F.FileStoreAdapter('/tmp/hello')
-const repo       = new R.EntryRepository(adapter)
-const handler    = new H.CommandHandler(repo)
-const dispatcher = new D.Dispatcher(handler)
+export function dispatcher() {
+  const adapter = new F.FileStoreAdapter('/tmp/hello')
+  const reader = new R.EntryReader(adapter)
+  const writer = new R.EntryWriter(adapter)
+  const handler = new H.CommandHandler(reader, writer)
+
+  return new D.Dispatcher(handler)
+}

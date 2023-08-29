@@ -1,6 +1,6 @@
 import { DataStoreAdapter } from './dataStoreAdapter'
 
-export class FileStoreAdapter implements DataStoreAdapter {
+export class MemoryStoreAdapter implements DataStoreAdapter {
   path: string
 
   constructor(path: string) {

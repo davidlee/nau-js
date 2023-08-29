@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
-import { parse, recogniseCommand, ParsedCommand} from '../src/parser'
+import { parse, recogniseCommand, ParsedCommand } from '../src/parser'
 
 // https://taskwarrior.org/docs/syntax/
 
@@ -47,12 +47,10 @@ describe('recogniseCommand', () => {
 })
 
 describe('parse', () => {
-  
-  test('add a note -> !add "a note"',{skip: true}, t => {
+  test('add a note -> !add "a note"', { skip: true }, (t) => {
     let input = 'add a note'.split(' ')
     let result = parse(input) as ParsedCommand
     assert.equal(result.command, 'add')
-    assert.equal(result.modifiers.words, ['a','note'])
+    assert.equal(result.modifiers.words, ['a', 'note'])
   })
 })
-

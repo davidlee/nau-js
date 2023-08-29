@@ -1,11 +1,8 @@
-import { argsFromArgv, parse} from './parser'
-import * as Loader from './dataLayerLoader'
+import { parseArgs, parse } from './parser'
+import * as Load from './dataLayerLoader'
 
-// console.log(process.argv)
-const command = parse(argsFromArgv(process.argv))
+const command = parseArgs(process.argv)
+const dispatch = Load.dispatcher()
 
-
-import { e } from './entry'
-console.log(e.text)
-
-console.log(Loader, '<')
+const res = dispatch.issueCommand(command)
+console.log(res)

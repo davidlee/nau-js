@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 // function generateUUID() {
 //   return "IRSETIRESNTIEI"
@@ -13,14 +13,14 @@ const StatusNames = z.enum([
   'Incubate',
   'Backlog',
   'Icebox',
- 
+
   'Ready',
   'Next',
   'Started',
   'Check',
   'Done',
   'Reflect',
- 
+
   'Stalled',
   'Aborted',
   'Archive',
@@ -38,51 +38,52 @@ const EntryTypes = z.enum([
 ])
 type EntryTypes = z.infer<typeof EntryTypes>
 
-export const Entry = z.object({
-  uid:       z.string().default(() => 'generateUUID()'),
-  id:        z.number(),
-  path:      z.array( z.string()).default([]),
+export const Entry = z
+  .object({
+    uid: z.string().default(() => 'generateUUID()'),
+    id: z.number(),
+    path: z.array(z.string()).default([]),
 
-  type:      z.string().default(EntryTypes.enum.Transient),
-  status:    z.string().default(StatusNames.enum.Draft),
-  position:  z.number().nullable(),
-  text:      z.string(),
-  
-  due:       z.date().nullable(),
-  end:       z.date().nullable(),
-  scheduled: z.date().nullable(),
-  until:     z.date().nullable(),
-  wait:      z.date().nullable(),
-  start:     z.date().nullable(),
-  
-  priority:  z.number().nullable(),
-  urgency:   z.number().default(1.0),
-  
-  parent:    z.string().nullable(),
-  
-  tags:      z.array( z.string()).default([]),
-  metadata:  z.record(z.string()).default({}),
+    type: z.string().default(EntryTypes.enum.Transient),
+    status: z.string().default(StatusNames.enum.Draft),
+    position: z.number().nullable(),
+    text: z.string(),
 
-  created:   z.date().default(() => new Date()),
-  modified:  z.date().default(() => new Date()),
-}).partial().required({
-  id: true,
-  uuid: true,
-  description: true,
-  created: true,
-  modified: true,
-  status: true,
-})
+    due: z.date().nullable(),
+    end: z.date().nullable(),
+    scheduled: z.date().nullable(),
+    until: z.date().nullable(),
+    wait: z.date().nullable(),
+    start: z.date().nullable(),
 
+    priority: z.number().nullable(),
+    urgency: z.number().default(1.0),
 
-export const e = Entry.parse({ id: 5, text: "hello" });
+    parent: z.string().nullable(),
+
+    tags: z.array(z.string()).default([]),
+    metadata: z.record(z.string()).default({}),
+
+    created: z.date().default(() => new Date()),
+    modified: z.date().default(() => new Date()),
+  })
+  .partial()
+  .required({
+    id: true,
+    uuid: true,
+    description: true,
+    created: true,
+    modified: true,
+    status: true,
+  })
+
+export const e = Entry.parse({ id: 5, text: 'hello' })
 
 // extract the inferred type
-type Entry = z.infer<typeof Entry>;
+export type Entry = z.infer<typeof Entry>
 
-console.log(e);
-console.log(e.text);
-
+console.log(e)
+console.log(e.text)
 
 /*
     UUID = Types::String.default { SecureRandom.uuid }

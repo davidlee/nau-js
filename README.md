@@ -21,6 +21,17 @@ Less moo. More milk.
 - separation of concerns. multiple front ends
 
 
+# TODO
+
+
+filters
+  tags
+    groups -> tag[]
+
+command -> interactive? -> confirmation(command)
+
+multiple parents ... primary?
+
 ## status
 
 entry(*)

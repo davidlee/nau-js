@@ -5,7 +5,7 @@ dispatcher
 commandHandler
 entry_repo
 entry
-data_store_adapter
+file_adapter
 
 app -> parser
 app -> dispatcher {style.stroke-dash: 5}
@@ -14,15 +14,27 @@ app -> UI
 
 
 dataLoader -> commandHandler
-dataLoader -> config
+dataLoader -> config {style.stroke-dash: 5}
 dataLoader -> dispatcher
-dataLoader -> entry_repo
+# :dataLoader -> entry_repo
 dataLoader -> entry
-dataLoader -> data_store_adapter
+dataLoader -> file_adapter
 
+dataLoader -> entry_reader
+dataLoader -> entry_writer
+# entry_reader -> entry_repo {style.stroke-dash: 5}
+# entry_writer -> entry_repo {style.stroke-dash: 5}
+entry_reader -> file_adapter {style.stroke-dash: 5}
+entry_writer -> file_adapter {style.stroke-dash: 5}
+entry_reader -> entry 
+entry_writer -> entry 
+entry_reader -> entry_repo {style.stroke: "#ccc"}
+entry_writer -> entry_repo {style.stroke: "#ccc"}
+entry_repo -> entry 
 
 dispatcher -> commandHandler {style.stroke-dash: 5}
-commandHandler -> entry_repo {style.stroke-dash: 5}
-entry_repo -> entry    {style.stroke-dash: 5}
-entry_repo -> data_store_adapter {style.stroke-dash: 5}
+commandHandler -> entry_reader {style.stroke-dash: 5}
+commandHandler -> entry_writer {style.stroke-dash: 5}
+#entry_repo -> entry    {style.stroke-dash: 5}
+#entry_repo -> file_adapter {style.stroke-dash: 5}
 
