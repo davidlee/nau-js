@@ -59,7 +59,7 @@ export const Default = {
 
 // EntryUpdate (compose)
 
-export const EntrySchema = Type.Object({
+export const Entry = Type.Object({
   id:        Type.Number({ default: Default.id   }),
   uid:       Type.String({ default: randomUUID  }),
   path:      Type.String({ default: Default.path }),
@@ -69,23 +69,26 @@ export const EntrySchema = Type.Object({
   position:  Type.Number({ default: 1}),
 
   text:      Type.String(),
-  uri:       Type.String(),
+  uri:       Type.Optional(Type.String()),
 
   tags:      Type.Array(Type.String(), { default: [] }), // TODO
   meta:      Type.Array(Type.String(), { default: [] }), // TODO
 
   priority:  Type.Optional(Type.Enum(Priority)),
-  urgency:   Type.Optional(Type.Number({ default: 1.0 })),
+
+  // urgency -- compute at runtime
+  // urgency:   Type.Optional(Type.Number({ default: 1.0 })),
 
   depends:   Type.Array(Type.String(), { default: [] }), // TODO
   parents:   Type.Array(Type.String(), { default: [] }), // TODO
-  children:  Type.Array(Type.String(), { default: [] }), // TODO
+  // children:  Type.Array(Type.String(), { default: [] }), // TODO
 
   recur:     Type.Array(Type.String(), { default: [] }), // TODO
   repeat:    Type.Array(Type.String(), { default: [] }), // TODO
   review:    Type.Array(Type.String(), { default: [] }), // TODO
 
-  cron:      Type.Optional(Type.Date()),
+  // when now > cron, needs processing for recurrence etc
+  cron:      Type.Optional(Type.Date()), 
   
   due:       Type.Optional(Type.Date()),  
   end:       Type.Optional(Type.Date()),  
@@ -93,20 +96,13 @@ export const EntrySchema = Type.Object({
   until:     Type.Optional(Type.Date()),  
   wait:      Type.Optional(Type.Date()),  
   start:     Type.Optional(Type.Date()),  
-  done:      Type.Optional(Type.Date()),  
+  reviewed:  Type.Optional(Type.Date()),  
 
   created:   Type.Date({ default: Default.date }),
   modified:  Type.Optional(Type.Date()),  
 })
 
-export type Entry = Static<typeof EntrySchema>
+export type Entry = Static<typeof Entry>
 
-// function nextID(): Number {
-//   return 1
-// }
-
-// function entryPath(): String {
-//   return '/'  
-// }
 
 

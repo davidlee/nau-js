@@ -18,9 +18,10 @@ export type CommandConfig = {
   aliases: string[]
   expect: TokenKind[]
   subcommands: CommandConfig[]
+  confirmation?: boolean 
 }
 
-const CommandConfigs: CommandConfig[] = Object.freeze([
+const CommandConfigs: CommandConfig[] = [
   {
     name: 'add',
     aliases: [],
@@ -63,8 +64,9 @@ const CommandConfigs: CommandConfig[] = Object.freeze([
     expect: [TokenKind.Modifier],
     subcommands: [], // ...
   },
-])
-// const CommandConfigNames = CommandConfigs.map(el => el.name)
+]
+// no reason it should change
+Object.freeze(CommandConfigs)
 
 export type CommandConfigList = {
   [key: string]: CommandConfig
@@ -75,19 +77,25 @@ export type TagSet = {
   [key: string]: string[]
 }
 
-// Zod? ValidCommandConfig?
-export type ParsedCommand = {
+// schema?
+export type ParsedCommandArgs = {
   filters: {
     ids: number[]
     tags: TagSet
     words: string[]
   }
-  command: string[]
   modifiers: {
     tags: TagSet
     words: string[]
   }
 }
+
+export type Command = {
+  command: string[]
+}
+
+export type ParsedCommand = Command & ParsedCommandArgs 
+
 type ParsingState = {
   tokens: string[]
   processedIndices: TokenKind[]

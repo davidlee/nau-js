@@ -1,4 +1,4 @@
-import { Entry } from './entry'
+import * as E from './entry'
 import { DataStoreAdapter } from './dataStoreAdapter'
 
 export abstract class EntryRepository {
@@ -16,6 +16,18 @@ export class EntryReader extends EntryRepository {
 }
 
 export class EntryWriter extends EntryRepository {
+
+  create(e: E.Entry): void { // todo return value
+    const result = E.Entry.Check(e)
+    if(result) {
+      this.adapter.persistEntry(e)
+    } else {
+      console.log('>> RESULT >>', result, e)
+      // ..
+    }
+  }
+
+  
   // constructor(adapter: DataStoreAdapter) {
   //   super(adapter)
   // }

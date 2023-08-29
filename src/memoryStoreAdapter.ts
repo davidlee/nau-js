@@ -1,10 +1,21 @@
 import { DataStoreAdapter } from './dataStoreAdapter'
-import * as E from './entry'
 
-export class MemoryStoreAdapter implements DataStoreAdapter {
-  path: string
+export class MemoryStoreAdapter extends DataStoreAdapter {
+  static data: string = ""
 
-  constructor(path: string) {
-    this.path = path
+  constructor() {
+    super()
+    // MemoryStoreAdapter.data ||= ""
+  }
+  
+  protected write(str:string) { MemoryStoreAdapter.write(str) }
+  protected read(){ return MemoryStoreAdapter.read }
+
+  static write(str:string) {
+    MemoryStoreAdapter.data += str
+  }
+
+  static read() {
+    return MemoryStoreAdapter.data
   }
 }

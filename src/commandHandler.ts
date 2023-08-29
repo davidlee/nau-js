@@ -1,37 +1,65 @@
-import { EntryRepository } from './entryRepository'
+import * as R from './entryRepository'
 import { Entry } from './entry'
+import { ParsedCommandArgs } from './parser'
+import { randomUUID } from 'crypto'
+// import { Value } from '@sinclair/typebox/value'
 
-interface Args {
-  filters: string[]
-  modifiers: string[]
-}
+type Args = ParsedCommandArgs
 
 export class CommandHandler {
-  private reader: EntryRepository
-  private writer: EntryRepository
+  private reader: R.EntryReader
+  private writer: R.EntryWriter
 
-  add: Function
-  modify: Function
-  remove: Function
-  list: Function
-  configure: Function
 
-  constructor(read: EntryRepository, write: EntryRepository) {
+  constructor(read: R.EntryReader, write: R.EntryWriter) {
     this.reader = read
     this.writer = write
+  }
 
-    this.add = add
-    this.modify = modify
-    this.remove = remove
-    this.list = list
-    this.configure = configure
+  add(args: Args) {
+    console.log('called handler.#add', args)
+    let e: Entry = new EntryBuilder().build(args)
+    this.writer.create(e)
   }
 }
 
-function add(args: Args) {
-  console.log('called', args)
+
+
+class EntryBuilder {
+  // args:  Args
+
+  static schema = Entry
+  
+  // constructor(args: Args) {
+    // this.args  = args
+  // }
+
+  build(args: Args): Entry {
+    const defaults = { ...this.generateID(), ...this.generateUID(), ...this.generatePath() }
+    const props    = { text: args.modifiers.words.join(' ') }
+    const entry: Entry = { ...Entry.Create(Entry), ...defaults, ...props }
+    
+    // console.log(this.entry)
+       
+    // should this go in the repo? yes
+
+    // console.log('>> RESULT >>', result, this.entry)
+    return entry
+  }
+
+  generateUID() {
+    return { uid: randomUUID().slice(0,8) }
+  }
+
+  generateID() {
+    return { id: 1 }
+  }
+  
+  generatePath() {
+    return { path: '/' }
+  }
+
+  // tags
+  // priority
+  
 }
-function modify(args: Args) {}
-function remove(args: Args) {}
-function list(args: Args) {}
-function configure(args: Args) {}
