@@ -1,6 +1,4 @@
-// import * as R from 'ramda'
 import { ParsedCommand } from './parser'
-// import { ZodFunctionDef } from 'zod'
 import camelCase from 'camelcase'
 
 export type CommandHandlers = {

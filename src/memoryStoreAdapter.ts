@@ -1,4 +1,5 @@
 import { DataStoreAdapter } from './dataStoreAdapter'
+import * as E from './entry'
 
 export class MemoryStoreAdapter implements DataStoreAdapter {
   path: string

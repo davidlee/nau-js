@@ -11,6 +11,9 @@ dependencies:
   '@effect/language-service':
     specifier: ^0.0.21
     version: 0.0.21
+  '@sinclair/typebox':
+    specifier: ^0.31.5
+    version: 0.31.5
   blessed:
     specifier: ^0.1.81
     version: 0.1.81
@@ -32,9 +35,6 @@ dependencies:
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
-  zod:
-    specifier: ^3.22.2
-    version: 3.22.2
 
 devDependencies:
   '@types/argparse':
@@ -638,6 +638,10 @@ packages:
       picocolors: 1.0.0
       tslib: 2.6.2
     dev: true
+
+  /@sinclair/typebox@0.31.5:
+    resolution: {integrity: sha512-4fbqH1ONle98ULTQakJFVNwGwSx+rv90HEnjZGt1GoApMKooUw1WXw3ub+Ew7rInmyDcwsjIxiHt39bkWzeCBA==}
+    dev: false
 
   /@tsconfig/node10@1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
@@ -2062,7 +2066,3 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
-
-  /zod@3.22.2:
-    resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
-    dev: false

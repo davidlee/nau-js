@@ -1,120 +1,112 @@
-import { z } from 'zod'
+import { Type, Static } from '@sinclair/typebox'
+import { randomUUID } from 'crypto'
 
-// function generateUUID() {
-//   return "IRSETIRESNTIEI"
+export enum StatusNames {
+  Capture  = 'Capture',
+  Draft    = 'Draft',
+  Rework   = 'Rework',
+  Clarify  = 'Clarify',
+  Incubate = 'Incubate',
+  Backlog  = 'Backlog',
+  Icebox   = 'Icebox',
+
+  Ready    = 'Ready',
+  Next     = 'Next',
+  Started  = 'Started',
+  Check    = 'Check',
+  Done     = 'Done',
+  Reflect  = 'Reflect',
+
+  Stalled  = 'Stalled',
+  Aborted  = 'Aborted',
+  Archive  = 'Archive',
+  Deleted  = 'Deleted',
+}
+
+export enum EntryTypes {
+  Transient = 'Transient',
+  Note      = 'Note',
+  Area      = 'Area',
+  Objective = 'Objective',
+  Project   = 'Project',
+  Task      = 'Task',
+}
+
+export enum Priority {
+  NONE = 0,
+  LOW  = 1,
+  MED  = 2, 
+  HIGH = 3,
+  VERY = 4,
+  MAX  = 5
+}
+
+export const Default = {
+  date: () => new Date,
+  id:   () => 1,
+  path: () => '/',
+  uid:  () => randomUUID().slice(0,8)
+}
+
+// TODO
+// define:
+// TAG
+// REFERENCE
+// UID
+// PATH
+// URI
+// DATE(fmt)
+
+// EntryUpdate (compose)
+
+export const EntrySchema = Type.Object({
+  id:        Type.Number({ default: Default.id   }),
+  uid:       Type.String({ default: randomUUID  }),
+  path:      Type.String({ default: Default.path }),
+
+  type:      Type.String({ default: EntryTypes.Transient }),
+  status:    Type.String({ default: StatusNames.Capture }),
+  position:  Type.Number({ default: 1}),
+
+  text:      Type.String(),
+  uri:       Type.String(),
+
+  tags:      Type.Array(Type.String(), { default: [] }), // TODO
+  meta:      Type.Array(Type.String(), { default: [] }), // TODO
+
+  priority:  Type.Optional(Type.Enum(Priority)),
+  urgency:   Type.Optional(Type.Number({ default: 1.0 })),
+
+  depends:   Type.Array(Type.String(), { default: [] }), // TODO
+  parents:   Type.Array(Type.String(), { default: [] }), // TODO
+  children:  Type.Array(Type.String(), { default: [] }), // TODO
+
+  recur:     Type.Array(Type.String(), { default: [] }), // TODO
+  repeat:    Type.Array(Type.String(), { default: [] }), // TODO
+  review:    Type.Array(Type.String(), { default: [] }), // TODO
+
+  cron:      Type.Optional(Type.Date()),
+  
+  due:       Type.Optional(Type.Date()),  
+  end:       Type.Optional(Type.Date()),  
+  scheduled: Type.Optional(Type.Date()),  
+  until:     Type.Optional(Type.Date()),  
+  wait:      Type.Optional(Type.Date()),  
+  start:     Type.Optional(Type.Date()),  
+  done:      Type.Optional(Type.Date()),  
+
+  created:   Type.Date({ default: Default.date }),
+  modified:  Type.Optional(Type.Date()),  
+})
+
+export type Entry = Static<typeof EntrySchema>
+
+// function nextID(): Number {
+//   return 1
 // }
-// const _StatusNames = z.enum(["DRAFT", "READY", "WIP", "DONE", "CANCELLED", "SOMEDAY", "WAITING", "TEMPLATE", "DELETED"])
 
-const StatusNames = z.enum([
-  'Capture',
-  'Draft',
-  'Rework',
-  'Clarify',
-  'Incubate',
-  'Backlog',
-  'Icebox',
+// function entryPath(): String {
+//   return '/'  
+// }
 
-  'Ready',
-  'Next',
-  'Started',
-  'Check',
-  'Done',
-  'Reflect',
 
-  'Stalled',
-  'Aborted',
-  'Archive',
-  'Deleted',
-])
-type StatusNames = z.infer<typeof StatusNames>
-
-const EntryTypes = z.enum([
-  'Transient',
-  'Note',
-  'Area',
-  'Objective',
-  'Project',
-  'Task',
-])
-type EntryTypes = z.infer<typeof EntryTypes>
-
-export const Entry = z
-  .object({
-    uid: z.string().default(() => 'generateUUID()'),
-    id: z.number(),
-    path: z.array(z.string()).default([]),
-
-    type: z.string().default(EntryTypes.enum.Transient),
-    status: z.string().default(StatusNames.enum.Draft),
-    position: z.number().nullable(),
-    text: z.string(),
-
-    due: z.date().nullable(),
-    end: z.date().nullable(),
-    scheduled: z.date().nullable(),
-    until: z.date().nullable(),
-    wait: z.date().nullable(),
-    start: z.date().nullable(),
-
-    priority: z.number().nullable(),
-    urgency: z.number().default(1.0),
-
-    parent: z.string().nullable(),
-
-    tags: z.array(z.string()).default([]),
-    metadata: z.record(z.string()).default({}),
-
-    created: z.date().default(() => new Date()),
-    modified: z.date().default(() => new Date()),
-  })
-  .partial()
-  .required({
-    id: true,
-    uuid: true,
-    description: true,
-    created: true,
-    modified: true,
-    status: true,
-  })
-
-export const e = Entry.parse({ id: 5, text: 'hello' })
-
-// extract the inferred type
-export type Entry = z.infer<typeof Entry>
-
-console.log(e)
-console.log(e.text)
-
-/*
-    UUID = Types::String.default { SecureRandom.uuid }
-      schema do
-        attribute :uuid,        Types::UUID
-        attribute :id,          Types::String # cache
-        # attribute :order,       Types::Int
-        attribute :status,      Types::String # ??
-        attribute :description, Types::String
-
-        attribute :due,         Types::Date
-        attribute :end,         Types::Date
-        attribute :scheduled,   Types::Date
-        attribute :until,       Types::Date
-        attribute :wait,        Types::Date
-        attribute :start,       Types::Date # ??
-
-        attribute :priority,    Types::Number # Enum
-        attribute :urgency,     Types::Number # Enum
-
-        attribute :area,        Types::UUID
-        attribute :parent,      Types::UUID
-
-        attribute :annotations, Types::Array # of UUID
-        attribute :tags,        Types::Array
-        attribute :metadata,    Types::Hash
-
-        attribute :created,     Types::Date
-        attribute :modified,    Types::Date
-      end
-
-      auto_struct(true)
-    end
-*/
