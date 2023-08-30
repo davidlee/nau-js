@@ -1,8 +1,8 @@
 import * as R from './entryRepository'
 import { Entry } from './entry'
 import { ParsedCommandArgs } from './parser'
-import { randomUUID } from 'crypto'
-// import { Value } from '@sinclair/typebox/value'
+import { Value } from '@sinclair/typebox/value'
+import { uid } from './uid'
 
 type Args = ParsedCommandArgs
 
@@ -10,56 +10,56 @@ export class CommandHandler {
   private reader: R.EntryReader
   private writer: R.EntryWriter
 
-
   constructor(read: R.EntryReader, write: R.EntryWriter) {
     this.reader = read
     this.writer = write
   }
 
   add(args: Args) {
-    console.log('called handler.#add', args)
-    let e: Entry = new EntryBuilder().build(args)
-    this.writer.create(e)
+    // console.log('called handler.#add', args)
+    const e: Entry = new EntryBuilder().build(args, this.reader)
+    return this.writer.create(e)
+  }
+
+  list(args: Args) {
+    console.log("== LIST ==")
+    return this.reader
   }
 }
 
-
-
+// ...
 class EntryBuilder {
-  // args:  Args
-
   static schema = Entry
   
-  // constructor(args: Args) {
-    // this.args  = args
-  // }
-
-  build(args: Args): Entry {
-    const defaults = { ...this.generateID(), ...this.generateUID(), ...this.generatePath() }
-    const props    = { text: args.modifiers.words.join(' ') }
-    const entry: Entry = { ...Entry.Create(Entry), ...defaults, ...props }
+  build(args: Args, reader: R.EntryReader): Entry {
+    const props = { 
+      id:   this.nextID(), 
+      uid:  this.generateUID(), 
+      path: this.generatePath(args),
+      text: this.text(args),
+      created: new Date(),
+    }
+    const entry: Entry = { ...Value.Create(Entry), ...props }
     
-    // console.log(this.entry)
-       
-    // should this go in the repo? yes
-
-    // console.log('>> RESULT >>', result, this.entry)
+    console.log("ENTRY::: ", entry)
     return entry
   }
 
-  generateUID() {
-    return { uid: randomUUID().slice(0,8) }
+  protected text(args: Args): string {
+    return args.modifiers.words.join(' ') 
   }
 
-  generateID() {
-    return { id: 1 }
-  }
-  
-  generatePath() {
-    return { path: '/' }
+  protected generateUID(): string {
+    return uid() 
   }
 
-  // tags
-  // priority
+  protected nextID(): number {
+    // this.reader.getMaxID() 
+    return 1 
+  }
   
+  protected generatePath(args: Args): string {
+    // this.reader.getPath( ... )
+    return '/' 
+  }
 }

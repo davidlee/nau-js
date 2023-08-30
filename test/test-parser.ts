@@ -47,10 +47,10 @@ describe('recogniseCommand', () => {
 })
 
 describe('parse', () => {
-  test('add a note -> !add "a note"', { skip: true }, (t) => {
+  test('add a note -> !add "a note"', (t) => {
     let input = 'add a note'.split(' ')
     let result = parse(input) as ParsedCommand
-    assert.equal(result.command, 'add')
-    assert.equal(result.modifiers.words, ['a', 'note'])
+    assert.deepEqual(result.command, ['add'])
+    assert.deepEqual(result.modifiers.words, ['a', 'note'])
   })
 })

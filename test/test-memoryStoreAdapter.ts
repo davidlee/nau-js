@@ -1,15 +1,22 @@
 import assert from 'node:assert/strict'
-import { describe, test } from 'node:test'
+import { beforeEach, describe, test } from 'node:test'
 import { MemoryStoreAdapter } from '../src/memoryStoreAdapter'
+import * as E from '../src/entry'
+import { Value } from '@sinclair/typebox/value'
 
 // https://taskwarrior.org/docs/syntax/
+let mem: MemoryStoreAdapter | null = null
+let e: E.Entry = Value.Create(E.Entry)
 
 describe('memoryStoreAdapter', () => {
-  test('write: ', (t) => {
-    assert.equal(recogniseCommand('add')?.name, 'add')
+  beforeEach(() => {mem = new MemoryStoreAdapter()})
+  
+  test('persistEntry: returns true ', (t) => {
+    assert.equal(mem!.persistEntry(e), true)
   })
 
-  test('read: -> ', (t) => {
-    assert.equal(recogniseCommand('ad')?.name, 'add')
+  test('read', (t) => {
+    assert.deepEqual(mem!.read(), e)
   })
-}
+
+})

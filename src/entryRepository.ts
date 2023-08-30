@@ -18,11 +18,19 @@ export class EntryReader extends EntryRepository {
 export class EntryWriter extends EntryRepository {
 
   create(e: E.Entry): void { // todo return value
-    const result = E.Entry.Check(e)
+    console.log('create', e)
+
+    const result: boolean = E.Entry.Check(e)
+    
+    console.log('result:: ', result)
     if(result) {
       this.adapter.persistEntry(e)
     } else {
       console.log('>> RESULT >>', result, e)
+
+      const valErrs = [...E.C.Errors(e)]  
+      
+      console.log(valErrs)
       // ..
     }
   }

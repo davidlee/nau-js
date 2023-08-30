@@ -41,6 +41,12 @@ const CommandConfigs: CommandConfig[] = [
     subcommands: [],
   },
   {
+    name: 'list',
+    aliases: ['ls'],
+    expect: [TokenKind.Filter],
+    subcommands: [],
+  },
+  {
     name: 'context',
     aliases: ['@'],
     expect: [TokenKind.Modifier],
@@ -67,6 +73,7 @@ const CommandConfigs: CommandConfig[] = [
 ]
 // no reason it should change
 Object.freeze(CommandConfigs)
+const defaultCommandName = 'list'
 
 export type CommandConfigList = {
   [key: string]: CommandConfig
@@ -138,7 +145,7 @@ function extractCommand(state: State): ParsedCommand {
 // everything before it is a filter (ids, etc)
 // everything after it is a modification
 
-export function parse(tokens: string[]): ParsedCommand | Error {
+export function parse(tokens: string[]): ParsedCommand {
   let state = buildState(tokens)
 
   // find the command [and any subcommands]
@@ -153,13 +160,34 @@ export function parse(tokens: string[]): ParsedCommand | Error {
       break // FIXME subcommands
     }
   }
+  
+  if (state.command.length === 0) {
+    state.command.push(defaultCommandName)
+  }
+
+  tokens.forEach((word, i) => {
+    if(state.processedIndices[i] === undefined) {
+      const commandIndex = state.processedIndices.indexOf(TokenKind.Command)
+      if (i < commandIndex) {
+        state.processedIndices[i] = TokenKind.Filter
+        state.filters.words.push(word)
+      } else {
+        state.processedIndices[i] = TokenKind.Modifier
+        state.modifiers.words.push(word)
+      }
+      // todo check if it's an ID, tag, etc ... otherwise
+      state.processedIndices[i] = TokenKind.Filter
+      
+    }
+  })
+  
   // now extract ids, tags, etc and assign to filters / modifiers
   // depending on their position relative to the command
   // ...
   return extractCommand(state as State)
 }
 
-export function parseArgs(argv: string[]): ParsedCommand | Error {
+export function parseArgs(argv: string[]): ParsedCommand {
   return parse(argsFromArgv(argv))
 }
 
@@ -182,11 +210,9 @@ export function recogniseCommand(
   word: string,
   candidates = CommandConfigs,
 ): CommandConfig | null {
-  // check for exact matches of any aliases first:
+  // check for exact matches of any aliases
   const aliases = commandAliases(candidates)
   if (Object.keys(aliases).includes(word)) return aliases[word]
-  // let aliasedCommandConfig: CommandConfig | null = aliases[word]
-  // if (aliasedCommandConfig) return aliasedCommandConfig
 
   // otherwise, check for a partial unique match of any command
   const rx = new RegExp('^' + word)

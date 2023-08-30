@@ -12,8 +12,8 @@ dependencies:
     specifier: ^0.0.21
     version: 0.0.21
   '@sinclair/typebox':
-    specifier: ^0.31.5
-    version: 0.31.5
+    specifier: ^0.31.7
+    version: 0.31.7
   blessed:
     specifier: ^0.1.81
     version: 0.1.81
@@ -32,6 +32,9 @@ dependencies:
   ramda:
     specifier: ^0.29.0
     version: 0.29.0
+  ulid:
+    specifier: ^2.3.0
+    version: 2.3.0
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -63,7 +66,7 @@ devDependencies:
     version: 9.0.0(eslint@8.48.0)
   eslint-plugin-prettier:
     specifier: ^5.0.0
-    version: 5.0.0(eslint-config-prettier@9.0.0)(eslint@8.48.0)(prettier@3.0.2)
+    version: 5.0.0(eslint-config-prettier@9.0.0)(eslint@8.48.0)(prettier@3.0.3)
   husky:
     specifier: ^8.0.3
     version: 8.0.3
@@ -74,8 +77,8 @@ devDependencies:
     specifier: ^8.7.0
     version: 8.7.0
   prettier:
-    specifier: ^3.0.2
-    version: 3.0.2
+    specifier: ^3.0.3
+    version: 3.0.3
   ts-node:
     specifier: ^10.9.1
     version: 10.9.1(@types/node@20.5.7)(typescript@5.2.2)
@@ -661,8 +664,8 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@sinclair/typebox@0.31.5:
-    resolution: {integrity: sha512-4fbqH1ONle98ULTQakJFVNwGwSx+rv90HEnjZGt1GoApMKooUw1WXw3ub+Ew7rInmyDcwsjIxiHt39bkWzeCBA==}
+  /@sinclair/typebox@0.31.7:
+    resolution: {integrity: sha512-cl6qKMXSK95aMwIzSQJeenKBtPmE1+hqts3vJe93EaSa7cIaNjz3A5yMKkgW/bAhjnOpa/yiCCV1pOG1bzzv0A==}
     dev: false
 
   /@tsconfig/node10@1.0.9:
@@ -1250,7 +1253,7 @@ packages:
       eslint: 8.48.0
     dev: true
 
-  /eslint-plugin-prettier@5.0.0(eslint-config-prettier@9.0.0)(eslint@8.48.0)(prettier@3.0.2):
+  /eslint-plugin-prettier@5.0.0(eslint-config-prettier@9.0.0)(eslint@8.48.0)(prettier@3.0.3):
     resolution: {integrity: sha512-AgaZCVuYDXHUGxj/ZGu1u8H8CYgDY3iG6w5kUFw4AzMVXzB7VvbKgYR4nATIN+OvUrghMbiDLeimVjVY5ilq3w==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -1266,7 +1269,7 @@ packages:
     dependencies:
       eslint: 8.48.0
       eslint-config-prettier: 9.0.0(eslint@8.48.0)
-      prettier: 3.0.2
+      prettier: 3.0.3
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.5
     dev: true
@@ -2045,8 +2048,8 @@ packages:
       fast-diff: 1.3.0
     dev: true
 
-  /prettier@3.0.2:
-    resolution: {integrity: sha512-o2YR9qtniXvwEZlOKbveKfDQVyqxbEIWn48Z8m3ZJjBjcCmUy3xZGIv+7AkaeuaTr6yPXJjwv07ZWlsWbEy1rQ==}
+  /prettier@3.0.3:
+    resolution: {integrity: sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -2408,6 +2411,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
+
+  /ulid@2.3.0:
+    resolution: {integrity: sha512-keqHubrlpvT6G2wH0OEfSW4mquYRcbe/J8NMmveoQOjUqmo+hXtO+ORCpWhdbZ7k72UtY61BL7haGxW6enBnjw==}
+    hasBin: true
+    dev: false
 
   /untildify@4.0.0:
     resolution: {integrity: sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==}

@@ -8,14 +8,20 @@ export class MemoryStoreAdapter extends DataStoreAdapter {
     // MemoryStoreAdapter.data ||= ""
   }
   
-  protected write(str:string) { MemoryStoreAdapter.write(str) }
-  protected read(){ return MemoryStoreAdapter.read }
+  protected write(str:string) { 
+    MemoryStoreAdapter.write(str) 
+    return true
+  }
+
+  read(): object { 
+    return JSON.parse( MemoryStoreAdapter.read() )
+  }
 
   static write(str:string) {
     MemoryStoreAdapter.data += str
   }
 
-  static read() {
+  static read(): string {
     return MemoryStoreAdapter.data
   }
 }

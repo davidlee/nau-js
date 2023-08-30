@@ -1,4 +1,5 @@
 import { Type, Static } from '@sinclair/typebox'
+import { TypeCompiler } from '@sinclair/typebox/compiler'
 import { randomUUID } from 'crypto'
 
 export enum StatusNames {
@@ -43,8 +44,8 @@ export enum Priority {
 
 export const Default = {
   date: () => new Date,
-  id:   () => 1,
-  path: () => '/',
+  id:    1,
+  path: '/',
   uid:  () => randomUUID().slice(0,8)
 }
 
@@ -60,9 +61,9 @@ export const Default = {
 // EntryUpdate (compose)
 
 export const Entry = Type.Object({
-  id:        Type.Number({ default: Default.id   }),
-  uid:       Type.String({ default: randomUUID  }),
-  path:      Type.String({ default: Default.path }),
+  id:        Type.Number(), // READ nextID()
+  uid:       Type.String(), // uid()
+  path:      Type.String(), // path(parent?)
 
   type:      Type.String({ default: EntryTypes.Transient }),
   status:    Type.String({ default: StatusNames.Capture }),
@@ -98,11 +99,12 @@ export const Entry = Type.Object({
   start:     Type.Optional(Type.Date()),  
   reviewed:  Type.Optional(Type.Date()),  
 
-  created:   Type.Date({ default: Default.date }),
+  created:   Type.Date({ default: new Date() }), // FIXME won't work in a long-lived process
   modified:  Type.Optional(Type.Date()),  
 })
-
 export type Entry = Static<typeof Entry>
 
-
+// this is expensive
+// TODO benchmark
+export const C = TypeCompiler.Compile(Entry)
 
