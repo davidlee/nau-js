@@ -127,13 +127,9 @@ function buildState(tokens: string[]): State {
   } as State
 }
 
+// remove data only needed for tracking parser state, 
+// leaving a command, any subcommands, and filters + modifiers
 function extractCommand(state: State): ParsedCommand {
-  // return {
-  //   filters:   state.filters,
-  //   command:   state.command,
-  //   modifiers: state.modifiers,
-  // } as ParsedCommand
-
   const { tokens, processedIndices, ...parsed } = state
   return parsed
 }
@@ -147,27 +143,19 @@ function extractCommand(state: State): ParsedCommand {
 
 export function parse(tokens: string[]): ParsedCommand {
   let state = buildState(tokens)
-
-  // find the command [and any subcommands]
-  for (let i = 0; i < tokens.length; i++) {
-    const word = tokens[i]
-    const command: CommandConfig | null = recogniseCommand(word)
-
-    if (command) {
-      // if(command.subcommands.length > 0)  // FIXME track depth
-      state.processedIndices[i] = TokenKind.Command
-      state.command.push(command.name)
-      break // FIXME subcommands
-    }
-  }
+      state = parseCommands(state) 
   
-  if (state.command.length === 0) {
+  if (state.command.length === 0) 
     state.command.push(defaultCommandName)
-  }
+  
+  // how we interpret remaining tokens depends on whether they're 
+  // before or after a command
+  const commandIndex = state.processedIndices.indexOf(TokenKind.Command)
 
-  tokens.forEach((word, i) => {
+  state.tokens.forEach((word, i) => {
     if(state.processedIndices[i] === undefined) {
-      const commandIndex = state.processedIndices.indexOf(TokenKind.Command)
+      // todo match IDs, tags, etc ... otherwise
+      // just treat as a word
       if (i < commandIndex) {
         state.processedIndices[i] = TokenKind.Filter
         state.filters.words.push(word)
@@ -175,16 +163,31 @@ export function parse(tokens: string[]): ParsedCommand {
         state.processedIndices[i] = TokenKind.Modifier
         state.modifiers.words.push(word)
       }
-      // todo check if it's an ID, tag, etc ... otherwise
-      state.processedIndices[i] = TokenKind.Filter
-      
     }
   })
-  
-  // now extract ids, tags, etc and assign to filters / modifiers
-  // depending on their position relative to the command
-  // ...
-  return extractCommand(state as State)
+  return extractCommand(state)
+}
+
+function parseCommands(state: State): State {
+  let validCommands = CommandConfigs
+
+  // find the command [and any subcommands]
+  for (let i = 0; i < state.tokens.length; i++) {
+    const word = state.tokens[i]
+    const command: CommandConfig | null = recogniseCommand(word, validCommands)
+
+    if (command) {
+      state.processedIndices[i] = TokenKind.Command
+      state.command.push(command.name)
+      validCommands = command.subcommands
+      // there are no valid subcommands: we're done 
+      if (validCommands.length === 0) 
+        break
+    } else if(state.processedIndices.some( e => {e === TokenKind.Command})) 
+      // we've previously found a command, but matched no valid subcommand
+        break 
+  }
+  return state // TODO rather than mutate the state, return an immutable update
 }
 
 export function parseArgs(argv: string[]): ParsedCommand {
@@ -206,10 +209,7 @@ function commandAliases(
 // matchers
 //
 
-export function recogniseCommand(
-  word: string,
-  candidates = CommandConfigs,
-): CommandConfig | null {
+export function recogniseCommand(word: string, candidates=CommandConfigs): CommandConfig | null {
   // check for exact matches of any aliases
   const aliases = commandAliases(candidates)
   if (Object.keys(aliases).includes(word)) return aliases[word]

@@ -18,7 +18,7 @@ export class FileStoreAdapter extends DataStoreAdapter {
     
     let fd: number
     
-    using cleanup = new DisposableStack();
+    using cleanup = new DisposableStack()
     cleanup.defer(() => {
       if(fd !== undefined)
         fs.closeSync(fd)

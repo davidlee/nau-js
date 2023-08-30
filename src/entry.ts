@@ -61,9 +61,9 @@ export const Default = {
 // EntryUpdate (compose)
 
 export const Entry = Type.Object({
-  id:        Type.Number(), // READ nextID()
-  uid:       Type.String(), // uid()
-  path:      Type.String(), // path(parent?)
+  id:        Type.Number(), // required
+  uid:       Type.String(), // required
+  path:      Type.String(), // required
 
   type:      Type.String({ default: EntryTypes.Transient }),
   status:    Type.String({ default: StatusNames.Capture }),
@@ -82,7 +82,6 @@ export const Entry = Type.Object({
 
   depends:   Type.Array(Type.String(), { default: [] }), // TODO
   parents:   Type.Array(Type.String(), { default: [] }), // TODO
-  // children:  Type.Array(Type.String(), { default: [] }), // TODO
 
   recur:     Type.Array(Type.String(), { default: [] }), // TODO
   repeat:    Type.Array(Type.String(), { default: [] }), // TODO
@@ -99,7 +98,7 @@ export const Entry = Type.Object({
   start:     Type.Optional(Type.Date()),  
   reviewed:  Type.Optional(Type.Date()),  
 
-  created:   Type.Date({ default: new Date() }), // FIXME won't work in a long-lived process
+  created:   Type.Date(),
   modified:  Type.Optional(Type.Date()),  
 })
 export type Entry = Static<typeof Entry>

@@ -16,7 +16,7 @@ describe('memoryStoreAdapter', () => {
   })
 
   test('read', (t) => {
-    assert.deepEqual(mem!.read(), e)
+    assert.deepEqual(mem!.read(), Value.Decode(E.Entry, e))
   })
 
 })

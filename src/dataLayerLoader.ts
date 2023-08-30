@@ -17,6 +17,7 @@ const defaults: Configuration  = {
   adapter: 'file',
   path: `${process.env.HOME}/.config/projector/entries.json`
 }
+
 export function dispatcher(options = {}) {
   const props: Configuration = {...defaults, ...options}
   let adapter: DataStoreAdapter
