@@ -1,8 +1,7 @@
-// import * as C from './configLoader'
+import * as C from './configLoader.js'
 import * as D from './dispatcher.js'
 import * as H from './commandHandler.js'
 import * as R from './entryRepository.js'
-// import * as E from './entry'
 import * as F from './fileStoreAdapter.js'
 import * as M from './memoryStoreAdapter.js'
 
@@ -15,7 +14,7 @@ interface Configuration {
 
 const defaults: Configuration  = {
   adapter: 'file',
-  path: `${process.env.HOME}/.config/projector/entries.json`
+  path: `${process.env.HOME}/.config/exec/entries.json`
 }
 
 export function dispatcher(options = {}) {

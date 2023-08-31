@@ -5,19 +5,19 @@ export class MemoryStoreAdapter extends DataStoreAdapter {
 
   constructor() {
     super()
-    // MemoryStoreAdapter.data ||= ""
   }
   
-  protected write(str:string) { 
-    MemoryStoreAdapter.write(str) 
-    return true
+  async write(str:string): Promise<void> { 
+    return new Promise((resolve, _reject)=> {
+      resolve(MemoryStoreAdapter.write(str))
+    })
   }
 
-  read(): object { 
+  async read(): Promise<object> { 
     return JSON.parse( MemoryStoreAdapter.read() )
   }
 
-  static write(str:string) {
+  static write(str:string): void {
     MemoryStoreAdapter.data += str
   }
 

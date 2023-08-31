@@ -1,4 +1,5 @@
-import * as fs from 'node:fs'
+// import * as fs from 'node:fs'
+import * as fs from 'node:fs/promises'
 import * as p from 'node:path'
 
 import { DataStoreAdapter } from './dataStoreAdapter.js'
@@ -9,27 +10,29 @@ export class FileStoreAdapter extends DataStoreAdapter {
   constructor(path: string) {
     super()
     this.path = path
+
+    this.ensureDirExists()
   }
 
-  
-  // append to a file, creating the directory if missing
-  protected write(str:string): void {
-    if(!fs.existsSync(this.path)) this.createDir()
+  async ensureDirExists() {
+    const dir = await fs.mkdir(p.dirname(this.path), { recursive: true }).
+      catch((err) => console.log("ERR:", err))
     
-    let fd: number
-    
-    using cleanup = new DisposableStack()
-    cleanup.defer(() => {
-      if(fd !== undefined)
-        fs.closeSync(fd)
-    })
-    
-    fd = fs.openSync(this.path, 'a')
-    fs.appendFileSync(fd, str);
-  }
-  
-  protected createDir() {
-    fs.mkdirSync(p.dirname(this.path), {recursive: true})
+    if(dir)
+      console.log('data directory created:', dir)
   }
 
+  async write(str: string): Promise<void> {
+    
+    let filehandle: fs.FileHandle | undefined
+    try {
+      filehandle = await fs.open(this.path, 'a')
+      return fs.appendFile(filehandle as fs.FileHandle, str) 
+    // } catch {
+    } finally {
+      if (filehandle !== undefined)
+        await filehandle.close()
+    }
+  }
+  
 }

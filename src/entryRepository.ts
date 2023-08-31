@@ -1,5 +1,6 @@
 import * as E from './entry.js'
 import { DataStoreAdapter } from './dataStoreAdapter.js'
+import { Value, ValueError } from '@sinclair/typebox/value'
 
 export abstract class EntryRepository {
   adapter: DataStoreAdapter
@@ -17,22 +18,14 @@ export class EntryReader extends EntryRepository {
 
 export class EntryWriter extends EntryRepository {
 
-  create(e: E.Entry): void { // todo return value
-    console.log('create', e)
-
-    const result: boolean = E.Entry.Check(e)
-    
-    console.log('result:: ', result)
-    if(result) {
-      this.adapter.persistEntry(e)
-    } else {
-      console.log('>> RESULT >>', result, e)
-
-      const valErrs = [...E.C.Errors(e)]  
-      
-      console.log(valErrs)
-      // ..
-    }
+  create(e: E.Entry): Promise<void> { // todo return value
+    const result: boolean = Value.Check(E.Entry, e)
+    if(!result) {
+      const valErrs: ValueError[] = [...E.C.Errors(e)]  
+      console.log('ValueError[] === ::', result, e, valErrs)
+      throw valErrs
+    } 
+    return this.adapter.persistEntry(e)
   }
 
   

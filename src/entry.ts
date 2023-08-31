@@ -1,5 +1,7 @@
 import { Type, Static } from '@sinclair/typebox'
 import { TypeCompiler } from '@sinclair/typebox/compiler'
+import { Value } from '@sinclair/typebox/value'
+import { uid } from './uid.js'
 
 export enum StatusNames {
   Capture  = 'Capture',
@@ -94,9 +96,61 @@ export const Entry = Type.Object({
   created:   Type.Date(),
   modified:  Type.Optional(Type.Date()),  
 })
+
 export type Entry = Static<typeof Entry>
 
 // this is expensive
 // TODO benchmark
 export const C = TypeCompiler.Compile(Entry)
+
+export type EntryFields = {
+  id?:           number,
+  uid?:          string,
+  path?:         string,
+  
+  type?:     EntryTypes,
+  status?:  StatusNames,
+  position?:     number,  
+  
+  text?:         string,
+  uri?:          string,
+  
+  tags?:         object,
+  meta?:         object,
+  
+  priority?:     number,
+  
+  depends?:      string[]
+  parents?:      string[]
+  
+  recur?:        string[]
+  repeat?:       string[]
+  review?:       string[]
+  
+  cron?:           Date,
+  
+  due?:            Date,
+  end?:            Date,
+  scheduled?:      Date,
+  until?:          Date,
+  wait?:           Date, 
+  start?:          Date, 
+  reviewed?:       Date,  
+  
+  created?:        Date, 
+  modified?:       Date, 
+}
+
+export function buildEntry(fields: EntryFields): Entry {
+  // apply defaults
+  const entry: Entry = Object.assign(Value.Create(Entry), {
+    uid:     uid(), 
+    created: new Date(),
+  })
+
+  // apply arguments
+  Object.assign(entry, fields)
+   
+  return entry
+}
 

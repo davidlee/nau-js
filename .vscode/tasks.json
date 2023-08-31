@@ -5,7 +5,7 @@
   "tasks": [
     {
       "type": "typescript",
-      "tsconfig": "simple-typescript-starter/tsconfig.json",
+      "tsconfig": "${workspaceFolder}/tsconfig.json",
       "problemMatcher": ["$tsc"]
     }
   ]

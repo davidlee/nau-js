@@ -1,9 +1,6 @@
-import { Value } from '@sinclair/typebox/value'
-
 import * as R from './entryRepository.js'
-import { Entry } from './entry.js'
+import { Entry, EntryFields, buildEntry } from './entry.js'
 import { ParsedCommandArgs } from './parser.js'
-import { uid } from './uid.js'
 
 type Args = ParsedCommandArgs
 
@@ -17,8 +14,8 @@ export class CommandHandler {
   }
 
   add(args: Args) {
-    // console.log('called handler.#add', args)
-    const e: Entry = new EntryBuilder().build(args, this.reader)
+    const e: Entry = buildEntry(this.processArgs(args))
+    console.log(e)
     return this.writer.create(e)
   }
 
@@ -26,41 +23,14 @@ export class CommandHandler {
     console.log("== LIST ==")
     return this.reader
   }
-}
 
-// ...
-class EntryBuilder {
-  static schema = Entry
-  
-  build(args: Args, reader: R.EntryReader): Entry {
-    const props = { 
-      id:   this.nextID(), 
-      uid:  this.generateUID(), 
-      path: this.generatePath(args),
-      text: this.text(args),
-      created: new Date(),
-    }
-    const entry: Entry = { ...Value.Create(Entry), ...props }
+  protected processArgs(args: Args) {
+    let fs: EntryFields = {}
+    const ms = args.modifiers
     
-    console.log("ENTRY::: ", entry)
-    return entry
-  }
-
-  protected text(args: Args): string {
-    return args.modifiers.words.join(' ') 
-  }
-
-  protected generateUID(): string {
-    return uid() 
-  }
-
-  protected nextID(): number {
-    // this.reader.getMaxID() 
-    return 1 
+    if(ms.words.length !== 0 ) { Object.assign(fs, {text: ms.words.join(' ')} ) }  
+    return fs
   }
   
-  protected generatePath(args: Args): string {
-    // this.reader.getPath( ... )
-    return '/' 
-  }
 }
+

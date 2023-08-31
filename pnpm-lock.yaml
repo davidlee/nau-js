@@ -35,9 +35,6 @@ dependencies:
   ulid:
     specifier: ^2.3.0
     version: 2.3.0
-  uuid:
-    specifier: ^9.0.0
-    version: 9.0.0
 
 devDependencies:
   '@types/argparse':
@@ -2427,11 +2424,6 @@ packages:
     dependencies:
       punycode: 2.3.0
     dev: true
-
-  /uuid@9.0.0:
-    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
-    hasBin: true
-    dev: false
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
