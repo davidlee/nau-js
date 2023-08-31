@@ -1,23 +1,16 @@
-// import * as R from 'ramda'
-// import { parseISO } from 'date-fns'
-// import { parseJSON } from 'date-fns/fp'
-
-export function argsFromArgv(argv: string[]): string[] {
-  return argv.slice(2) // .filter((arg) => !(arg === '--'))
-}
 
 enum TokenKind {
-  Command = 'commands',
-  Filter = 'filters',
+  Command  = 'commands',
+  Filter   = 'filters',
   Modifier = 'modifiers',
-  Ids = 'filters.ids',
+  Ids      = 'filters.ids',
 }
 
 export type CommandConfig = {
-  name: string
-  aliases: string[]
-  expect: TokenKind[]
-  subcommands: CommandConfig[]
+  name:          string
+  aliases:       string[]
+  expect:        TokenKind[]
+  subcommands:   CommandConfig[]
   confirmation?: boolean 
 }
 
@@ -73,7 +66,6 @@ const CommandConfigs: CommandConfig[] = [
 ]
 // no reason it should change
 Object.freeze(CommandConfigs)
-const defaultCommandName = 'list'
 
 export type CommandConfigList = {
   [key: string]: CommandConfig
@@ -84,15 +76,15 @@ export type TagSet = {
   [key: string]: string[]
 }
 
-// schema?
+// should use a typebox schema?
 export type ParsedCommandArgs = {
   filters: {
-    ids: number[]
-    tags: TagSet
+    ids:   number[]
+    tags:  TagSet
     words: string[]
   }
   modifiers: {
-    tags: TagSet
+    tags:  TagSet
     words: string[]
   }
 }
@@ -116,12 +108,12 @@ function buildState(tokens: string[]): State {
     command: [],
     processedIndices: [],
     filters: {
-      ids: [],
-      tags: {},
+      ids:   [],
+      tags:  {},
       words: [],
     },
     modifiers: {
-      tags: {},
+      tags:  {},
       words: [],
     },
   } as State
@@ -134,19 +126,20 @@ function extractCommand(state: State): ParsedCommand {
   return parsed
 }
 
+const DefaultCommandName = 'list'
+
 // https://taskwarrior.org/docs/syntax/
 // task <filter> <command> <modifications> <miscellaneous>
-
+//
 // first, find the first thing that looks like a command
 // everything before it is a filter (ids, etc)
 // everything after it is a modification
-
 export function parse(tokens: string[]): ParsedCommand {
   let state = buildState(tokens)
       state = parseCommands(state) 
   
   if (state.command.length === 0) 
-    state.command.push(defaultCommandName)
+    state.command.push(DefaultCommandName)
   
   // how we interpret remaining tokens depends on whether they're 
   // before or after a command
@@ -187,16 +180,14 @@ function parseCommands(state: State): State {
       // we've previously found a command, but matched no valid subcommand
         break 
   }
-  return state // TODO rather than mutate the state, return an immutable update
+  return state // FIXME rather than mutate the state, return an immutable update
 }
 
 export function parseArgs(argv: string[]): ParsedCommand {
   return parse(argsFromArgv(argv))
 }
 
-function commandAliases(
-  cmds: CommandConfig[] = CommandConfigs,
-): CommandConfigList {
+function commandAliases(cmds: CommandConfig[]=CommandConfigs): CommandConfigList {
   const o: CommandConfigList = {}
   cmds.map((c) =>
     c.aliases.forEach((alias) => {
@@ -247,3 +238,11 @@ function recogniseIds(word: string): number[] | null {
 }
 
 // function recogniseTags()
+// function recognisePriority()
+// function recogniseParent()
+
+// utility functions
+
+export function argsFromArgv(argv: string[]): string[] {
+  return argv.slice(2) // .filter((arg) => !(arg === '--'))
+}
