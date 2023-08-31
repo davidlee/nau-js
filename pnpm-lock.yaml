@@ -12,8 +12,8 @@ dependencies:
     specifier: ^0.0.21
     version: 0.0.21
   '@sinclair/typebox':
-    specifier: ^0.31.7
-    version: 0.31.7
+    specifier: ^0.31.8
+    version: 0.31.8
   blessed:
     specifier: ^0.1.81
     version: 0.1.81
@@ -71,8 +71,8 @@ devDependencies:
     specifier: ^7.1.0
     version: 7.1.0
   pnpm:
-    specifier: ^8.7.0
-    version: 8.7.0
+    specifier: ^8.7.1
+    version: 8.7.1
   prettier:
     specifier: ^3.0.3
     version: 3.0.3
@@ -661,8 +661,8 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@sinclair/typebox@0.31.7:
-    resolution: {integrity: sha512-cl6qKMXSK95aMwIzSQJeenKBtPmE1+hqts3vJe93EaSa7cIaNjz3A5yMKkgW/bAhjnOpa/yiCCV1pOG1bzzv0A==}
+  /@sinclair/typebox@0.31.8:
+    resolution: {integrity: sha512-1FdxgmuUqQWprlAHzGKTH3qSeNzbYnHXD65WIZOI037hcCZVw+r8SoFd8OIFUrbQxEI+MhHArCvKlndLvfw/bg==}
     dev: false
 
   /@tsconfig/node10@1.0.9:
@@ -2027,8 +2027,8 @@ packages:
     engines: {node: '>=8.6'}
     dev: true
 
-  /pnpm@8.7.0:
-    resolution: {integrity: sha512-HWH4wQ6KWl2/vd6g8fXvt9vVF3IjBzrslTzyMKpGQWiEuUJ6ZCHbp48orQ+T++3ji6VwgyN7NQJD3mseOoznHQ==}
+  /pnpm@8.7.1:
+    resolution: {integrity: sha512-Qbt3EhYUaXFS2k4FLQA7r2/eYz/JoDeG680/3UXG0Ga03LPuY4GgdvCLe+zO3M7ZnWG4VI4bAwk7QpJyfr5eqA==}
     engines: {node: '>=16.14'}
     hasBin: true
     dev: true
