@@ -1,5 +1,5 @@
-import { parseArgs, parse } from './parser'
-import * as Load from './dataLayerLoader'
+import { parseArgs, parse } from './parser.js'
+import * as Load from './dataLayerLoader.js'
 
 const command = parseArgs(process.argv)
 const dispatcher = Load.dispatcher()

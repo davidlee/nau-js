@@ -1,28 +1,14 @@
 import * as repl from 'node:repl'
 import * as E from './entry.js'
 import { Value } from '@sinclair/typebox/value'
+import { parseArgs, parse } from './parser.js'
+import * as Load from './dataLayerLoader.js'
 
 const replServer = repl.start('> ')
-replServer.context.E     = E
-replServer.context.Value = Value
 
+replServer.context.E          = E
+replServer.context.Entry      = E.Entry
+replServer.context.Value      = Value
+replServer.context.dispatcher = Load.dispatcher()
+replServer.context.parse      = parse
 
-// import repl from "repl";
-// import ts from "typescript";
-// import * as tsnode from "ts-node";
-
-// // Create a ts-node replService
-// const replService: tsnode.ReplService = tsnode.createRepl()
-// const service = tsnode.create({ ...replService.evalAwarePartialHost })
-// service.ts = ts;
-// replService.setService(service)
-
-// // create a node-repl server
-// const replServer = repl.start({
-//   prompt: "→º  ",
-//   ignoreUndefined: true,
-//   eval: replService.nodeEval,
-// });
-
-// // setup environment
-// replServer.setupHistory(".log", () => {})

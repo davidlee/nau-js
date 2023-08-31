@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import * as p from 'node:path'
 
-import { DataStoreAdapter } from './dataStoreAdapter'
+import { DataStoreAdapter } from './dataStoreAdapter.js'
 
 export class FileStoreAdapter extends DataStoreAdapter {
   path: string

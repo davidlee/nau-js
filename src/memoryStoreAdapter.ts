@@ -1,4 +1,4 @@
-import { DataStoreAdapter } from './dataStoreAdapter'
+import { DataStoreAdapter } from './dataStoreAdapter.js'
 
 export class MemoryStoreAdapter extends DataStoreAdapter {
   static data: string = ""

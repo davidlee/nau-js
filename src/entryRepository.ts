@@ -1,5 +1,5 @@
-import * as E from './entry'
-import { DataStoreAdapter } from './dataStoreAdapter'
+import * as E from './entry.js'
+import { DataStoreAdapter } from './dataStoreAdapter.js'
 
 export abstract class EntryRepository {
   adapter: DataStoreAdapter

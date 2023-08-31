@@ -1,6 +1,5 @@
 import { Type, Static } from '@sinclair/typebox'
 import { TypeCompiler } from '@sinclair/typebox/compiler'
-import { randomUUID } from 'crypto'
 
 export enum StatusNames {
   Capture  = 'Capture',
@@ -42,12 +41,6 @@ export enum Priority {
   MAX  = 5
 }
 
-export const Default = {
-  date: () => new Date,
-  id:    1,
-  path: '/',
-  uid:  () => randomUUID().slice(0,8)
-}
 
 // TODO
 // define:

@@ -23,6 +23,3 @@ export function uid(): string {
   return encode( ms() )
 }
 
-console.log(uid())
-console.log( ms())
-

@@ -19,7 +19,6 @@
     "prettier-watch": "pnpm exec onchange 'src/**/*.ts' 'test/**/*.ts' -- pnpm exec prettier --config .prettierrc -w {{changed}}",
     "prep": "pnpm run prettier & pnpm run lint && pnpm test",
     "deps": "pnpm exec depcruise -c .dependency-cruiser.cjs -I src -T dot . | dot -T svg > graph.svg && open -a Arc graph.svg",
-    "ex": "node --loader ts-node/esm src/*.ts",
     "repl": "node --loader ts-node/esm src/repl.ts"
   },
   "husky": {

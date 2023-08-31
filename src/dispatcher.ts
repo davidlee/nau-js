@@ -1,6 +1,6 @@
-import { ParsedCommand} from './parser'
+import { ParsedCommand} from './parser.js'
+import { CommandHandler } from './commandHandler.js'
 import camelCase from 'camelcase'
-import { CommandHandler } from './commandHandler'
 
 export class Dispatcher {
   commandHandler: CommandHandler

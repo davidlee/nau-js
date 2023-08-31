@@ -1,8 +1,9 @@
-import * as R from './entryRepository'
-import { Entry } from './entry'
-import { ParsedCommandArgs } from './parser'
 import { Value } from '@sinclair/typebox/value'
-import { uid } from './uid'
+
+import * as R from './entryRepository.js'
+import { Entry } from './entry.js'
+import { ParsedCommandArgs } from './parser.js'
+import { uid } from './uid.js'
 
 type Args = ParsedCommandArgs
 

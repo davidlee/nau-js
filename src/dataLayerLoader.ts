@@ -1,12 +1,12 @@
 // import * as C from './configLoader'
-import * as D from './dispatcher'
-import * as H from './commandHandler'
-import * as R from './entryRepository'
+import * as D from './dispatcher.js'
+import * as H from './commandHandler.js'
+import * as R from './entryRepository.js'
 // import * as E from './entry'
-import * as F from './fileStoreAdapter'
-import * as M from './memoryStoreAdapter'
+import * as F from './fileStoreAdapter.js'
+import * as M from './memoryStoreAdapter.js'
 
-import { DataStoreAdapter } from './dataStoreAdapter'
+import { DataStoreAdapter } from './dataStoreAdapter.js'
 
 interface Configuration {
   adapter: string,
