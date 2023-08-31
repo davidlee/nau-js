@@ -52,4 +52,4 @@ command -> interactive? -> confirmation(command)
 
 ## Diagrams
 
-[dependencies](./doc/graph.svg)
+![dependencies](./doc/graph.svg)
