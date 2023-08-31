@@ -1,6 +1,6 @@
-import * as E from './entry.js'
+import {Entry } from './entry.js'
 import { DataStoreAdapter } from './dataStoreAdapter.js'
-import { Value, ValueError } from '@sinclair/typebox/value'
+// import { Value, ValueError } from '@sinclair/typebox/value'
 
 export abstract class EntryRepository {
   adapter: DataStoreAdapter
@@ -11,25 +11,29 @@ export abstract class EntryRepository {
 }
 
 export class EntryReader extends EntryRepository {
-  // constructor(adapter: DataStoreAdapter) {
-  //   super(adapter)
-  // }
+  find(id:number) {
+    
+  }
+
+  findByUID(uid: string){
+    
+  }
+
+  async findAll(): Promise<Entry[]> {
+    let entries: Entry[] = []
+    await this.adapter.fetchEntries().then((es) => {
+      entries = es
+    })
+    return new Promise((resolve) => [
+      resolve(entries)
+    ])
+  }
 }
 
 export class EntryWriter extends EntryRepository {
 
-  create(e: E.Entry): Promise<void> { // todo return value
-    const result: boolean = Value.Check(E.Entry, e)
-    if(!result) {
-      const valErrs: ValueError[] = [...E.C.Errors(e)]  
-      console.log('ValueError[] === ::', result, e, valErrs)
-      throw valErrs
-    } 
+  create(e: Entry): Promise<void> { // todo return value
     return this.adapter.persistEntry(e)
   }
 
-  
-  // constructor(adapter: DataStoreAdapter) {
-  //   super(adapter)
-  // }
 }

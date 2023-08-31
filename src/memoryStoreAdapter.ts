@@ -13,8 +13,12 @@ export class MemoryStoreAdapter extends DataStoreAdapter {
     })
   }
 
-  async read(): Promise<object> { 
-    return JSON.parse( MemoryStoreAdapter.read() )
+  async read(): Promise<string[]> { 
+    return new Promise((resolve) => {
+      resolve(
+        MemoryStoreAdapter.read().split("\n")
+      )
+    })
   }
 
   static write(str:string): void {

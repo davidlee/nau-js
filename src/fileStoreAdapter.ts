@@ -1,6 +1,6 @@
 // import * as fs from 'node:fs'
-import * as fs from 'node:fs/promises'
-import * as p from 'node:path'
+import {open, appendFile, FileHandle, mkdir} from 'node:fs/promises'
+import {dirname} from 'node:path'
 
 import { DataStoreAdapter } from './dataStoreAdapter.js'
 
@@ -15,7 +15,7 @@ export class FileStoreAdapter extends DataStoreAdapter {
   }
 
   async ensureDirExists() {
-    const dir = await fs.mkdir(p.dirname(this.path), { recursive: true }).
+    const dir = await mkdir(dirname(this.path), { recursive: true }).
       catch((err) => console.log("ERR:", err))
     
     if(dir)
@@ -23,11 +23,29 @@ export class FileStoreAdapter extends DataStoreAdapter {
   }
 
   async write(str: string): Promise<void> {
-    
-    let filehandle: fs.FileHandle | undefined
+    let filehandle: FileHandle | undefined
     try {
-      filehandle = await fs.open(this.path, 'a')
-      return fs.appendFile(filehandle as fs.FileHandle, str) 
+      filehandle = await open(this.path, 'a')
+      return appendFile(filehandle as FileHandle, str + "\n") 
+    // } catch {
+    } finally {
+      if (filehandle !== undefined)
+        await filehandle.close()
+    }
+  }
+
+  async read(): Promise<string[]> {
+    let filehandle: FileHandle | undefined
+    let records: string[] = []
+
+    try {
+      filehandle = await open(this.path, 'r')
+      for await (const line of filehandle!.readLines()) {
+        records.push(line)
+      }
+      return new Promise((resolve) => {
+        resolve(records)
+      })
     // } catch {
     } finally {
       if (filehandle !== undefined)

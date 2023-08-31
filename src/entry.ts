@@ -67,20 +67,21 @@ export const Entry = Type.Object({
   text:      Type.String(),
   uri:       Type.Optional(Type.String()),
 
-  tags:      Type.Array(Type.String(), { default: [] }), // TODO
-  meta:      Type.Array(Type.String(), { default: [] }), // TODO
+  // these will need a mix of free and structured bits
+  tags:      Type.Object({}), 
+  meta:      Type.Object({}), 
 
   priority:  Type.Optional(Type.Enum(Priority)),
 
   // urgency -- compute at runtime
-  // urgency:   Type.Optional(Type.Number({ default: 1.0 })),
 
-  depends:   Type.Array(Type.String(), { default: [] }), // TODO
-  parents:   Type.Array(Type.String(), { default: [] }), // TODO
+  depends:   Type.Optional(Type.Array(Type.String())), 
+  parents:   Type.Optional(Type.Array(Type.String())), 
 
-  recur:     Type.Array(Type.String(), { default: [] }), // TODO
-  repeat:    Type.Array(Type.String(), { default: [] }), // TODO
-  review:    Type.Array(Type.String(), { default: [] }), // TODO
+  // these are for configuration - may not want tsrings, we'll see
+  recur:     Type.Optional(Type.String()), 
+  repeat:    Type.Optional(Type.String()), 
+  review:    Type.Optional(Type.String()), 
 
   // when now > cron, needs processing for recurrence etc
   cron:      Type.Optional(Type.Date()), 
@@ -93,8 +94,8 @@ export const Entry = Type.Object({
   start:     Type.Optional(Type.Date()),  
   reviewed:  Type.Optional(Type.Date()),  
 
-  created:   Type.Date(),
-  modified:  Type.Optional(Type.Date()),  
+  created:   Type.Transform(Type.String()).Decode(value => new Date(value)).Encode(value => value.toISOString()),
+  modified:  Type.Transform(Type.Optional(Type.String())).Decode(value => new Date(value)).Encode(value => value.toISOString()),
 })
 
 export type Entry = Static<typeof Entry>

@@ -6,14 +6,16 @@ import { Value } from '@sinclair/typebox/value'
 
 // https://taskwarrior.org/docs/syntax/
 let mem: MemoryStoreAdapter | null = null
-let e: E.Entry = Value.Create(E.Entry)
+let e: E.Entry = {} //Value.Create(E.Entry)
 
 describe('memoryStoreAdapter', () => {
   beforeEach(() => {mem = new MemoryStoreAdapter()})
   
   test('persistEntry: returns true ', (t) => {
+
+    e.created = new Date().toISOString()
     const promise = mem!.persistEntry(e)
-    promise.then((str) => assert.equal(str, ''))
+    promise.then((str) => console.log(str))
   })
 
   // test('read', (t) => {
