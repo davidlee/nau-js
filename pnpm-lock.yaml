@@ -11,6 +11,9 @@ dependencies:
   '@effect/language-service':
     specifier: ^0.0.21
     version: 0.0.21
+  '@prisma/client':
+    specifier: ^5.2.0
+    version: 5.2.0(prisma@5.2.0)
   '@sinclair/typebox':
     specifier: ^0.31.8
     version: 0.31.8
@@ -29,6 +32,9 @@ dependencies:
   esbuild:
     specifier: 0.19.2
     version: 0.19.2
+  prisma-extension-bark:
+    specifier: ^0.2.0
+    version: 0.2.0(@prisma/client@5.2.0)
   ramda:
     specifier: ^0.29.0
     version: 0.29.0
@@ -76,6 +82,9 @@ devDependencies:
   prettier:
     specifier: ^3.0.3
     version: 3.0.3
+  prisma:
+    specifier: ^5.2.0
+    version: 5.2.0
   ts-node:
     specifier: ^10.9.1
     version: 10.9.1(@types/node@20.5.7)(typescript@5.2.2)
@@ -660,6 +669,28 @@ packages:
       picocolors: 1.0.0
       tslib: 2.6.2
     dev: true
+
+  /@prisma/client@5.2.0(prisma@5.2.0):
+    resolution: {integrity: sha512-AiTjJwR4J5Rh6Z/9ZKrBBLel3/5DzUNntMohOy7yObVnVoTNVFi2kvpLZlFuKO50d7yDspOtW6XBpiAd0BVXbQ==}
+    engines: {node: '>=16.13'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      '@prisma/engines-version': 5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f
+      prisma: 5.2.0
+    dev: false
+
+  /@prisma/engines-version@5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f:
+    resolution: {integrity: sha512-jsnKT5JIDIE01lAeCj2ghY9IwxkedhKNvxQeoyLs6dr4ZXynetD0vTy7u6wMJt8vVPv8I5DPy/I4CFaoXAgbtg==}
+    dev: false
+
+  /@prisma/engines@5.2.0:
+    resolution: {integrity: sha512-dT7FOLUCdZmq+AunLqB1Iz+ZH/IIS1Fz2THmKZQ6aFONrQD/BQ5ecJ7g2wGS2OgyUFf4OaLam6/bxmgdOBDqig==}
+    requiresBuild: true
 
   /@sinclair/typebox@0.31.8:
     resolution: {integrity: sha512-1FdxgmuUqQWprlAHzGKTH3qSeNzbYnHXD65WIZOI037hcCZVw+r8SoFd8OIFUrbQxEI+MhHArCvKlndLvfw/bg==}
@@ -2050,6 +2081,22 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dev: true
+
+  /prisma-extension-bark@0.2.0(@prisma/client@5.2.0):
+    resolution: {integrity: sha512-Wre4HS/zSpySbzcy6z84buhBhfV6pPRhy48Sl29n6Tc9fFnOVen5XPabNtQb+d5a1ADoWoGxhTv1vrP5iivz8w==}
+    peerDependencies:
+      '@prisma/client': '>=5.0.0'
+    dependencies:
+      '@prisma/client': 5.2.0(prisma@5.2.0)
+    dev: false
+
+  /prisma@5.2.0:
+    resolution: {integrity: sha512-FfFlpjVCkZwrqxDnP4smlNYSH1so+CbfjgdpioFzGGqlQAEm6VHAYSzV7jJgC3ebtY9dNOhDMS2+4/1DDSM7bQ==}
+    engines: {node: '>=16.13'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 5.2.0
 
   /prompts@2.4.2:
     resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}

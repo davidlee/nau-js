@@ -1,11 +1,11 @@
 import { differenceInMilliseconds } from 'date-fns'
 
-var CHARSET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const CHARSET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export function encode(int:number): string {
   if (int === 0) return CHARSET[0]
 
-  var res = "";
+  let res = "";
   while (int > 0) {
     res = CHARSET[int % 62] + res
     int = Math.floor(int / 62)

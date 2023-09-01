@@ -26,7 +26,7 @@ export class FileStoreAdapter extends DataStoreAdapter {
     let filehandle: FileHandle | undefined
     try {
       filehandle = await open(this.path, 'a')
-      return appendFile(filehandle as FileHandle, str + "\n") 
+      return appendFile(filehandle , str + "\n") 
     // } catch {
     } finally {
       if (filehandle !== undefined)
@@ -36,11 +36,11 @@ export class FileStoreAdapter extends DataStoreAdapter {
 
   async read(): Promise<string[]> {
     let filehandle: FileHandle | undefined
-    let records: string[] = []
+    const records: string[] = []
 
     try {
       filehandle = await open(this.path, 'r')
-      for await (const line of filehandle!.readLines()) {
+      for await (const line of filehandle.readLines()) {
         records.push(line)
       }
       return new Promise((resolve) => {

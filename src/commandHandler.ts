@@ -27,7 +27,7 @@ export class CommandHandler {
   }
 
   protected processArgs(args: Args): EntryFields {
-    let fs: EntryFields = {}
+    const fs: EntryFields = {}
     const ms = args.modifiers
     
     if(ms.words.length !== 0 ) { Object.assign(fs, {text: ms.words.join(' ')} ) }  

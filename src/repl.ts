@@ -12,6 +12,6 @@ replServer.context.Value      = Value
 replServer.context.dispatcher = Load.dispatcher()
 replServer.context.parse      = parse
 replServer.context.cmd        = function(cmd: string){
-  let c = parse(cmd.split(' '))
+  const c = parse(cmd.split(' '))
   return replServer.context.dispatcher.dispatchCommand(c)
 }
