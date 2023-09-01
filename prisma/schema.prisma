@@ -1,3 +1,4 @@
+import { StatusNames, EntryTypes, Priority } from '../src/entry.js'
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -39,7 +40,7 @@ model Node {
   numchild Int    @default(0)
 
   //* relation's own fields *//
-  cuid     String  @unique @default(cuid()) 
+  name     String  @unique
   entry    Entry?  @relation("EntryNode")
 }
 
@@ -77,27 +78,26 @@ enum EntryType {
   // Activity
 }
 
-model Entry {
-  //* required by Bark *//
-  id         Int     @id @default(autoincrement())
-  path       String  @unique
-  depth      Int
-  numchild   Int     @default(0)
+// https://github.com/geckoboard/pgulid/blob/master/pgulid.sql
+// https://github.com/fboulnois/pg_uuidv7
 
+model Entry {
+  // id         String  @id @default(dbgenerated("generate_ulid()"))
+  id       Int    @id @default(autoincrement())
   entryType  EntryType @default(Transient) 
-  uuid       String  @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  cuid       String  @unique @default(cuid())
   
-  node Node @relation("EntryNode", fields: [nodeId], references: [id])
-  nodeId     Int     @unique
+  node       Node?   @relation("EntryNode", fields: [nodeId], references: [id])
+  nodeId     Int?    @unique
+  path       String? @unique   
   
-  parent     Entry?  @relation("Parent", fields: [parentId], references: [id])
-  children   Entry[] @relation("Parent")
-  parentId   Int?
+  // parents    Entry?  @relation("Parent", fields: [parentId], references: [id])
+  // children   Entry[] @relation("Parent")
+  // parentId   Int?
   depends    Entry[] @relation("Depends")
   dependents Entry[] @relation("Depends")
   tags       Tag[]   
-  updates    EntryUpdate[] @relation("EntryUpdates")
+  updates    Update[] @relation("EntryUpdates")
+  reviews    Review[] @relation("EntryReviews")
 
   meta       Json?
   position   Int     @default(1)
@@ -105,8 +105,7 @@ model Entry {
   text       String
   url        String?
   filePath   String?
-  
-  
+    
   priority   Int     @default(0)
   urgency    Float   @default(1.0)
 
@@ -117,25 +116,33 @@ model Entry {
   wait       DateTime?
   start      DateTime?
   
-  cfgRecur   Json? // mutually exclusive with repeat
-  cfgRepeat  Json? // ...  
-  cfgReview  Json? // for SRI / incr. writing
+  recurConfig      Json? // mutually exclusive with repeat
+  repeatConfig     Json? // ...  
+  reviewConfig     Json? // for SRI / incr. writing
+
   jobAt      DateTime? // cron / workers need to process recurrence / review
 
   created    DateTime  @default(now())
   modified   DateTime  @default(now())
-  deleted    DateTime? @default(now())
+  deleted    DateTime? 
    
   @@index([path])
   @@index([entryType])
-  @@index([parentId])
   @@index([status])
 }  
 
-model EntryUpdate {
-  id         String  @id @default(cuid())
+model Update {
+  id         Int    @id @default(autoincrement())
   created    DateTime  @default(now())
   changes    Json
   entry      Entry   @relation("EntryUpdates", fields: [entryId], references: [id])
+  entryId    Int 
+}
+
+model Review {
+  id         Int    @id @default(autoincrement())
+  created    DateTime  @default(now())
+  // changes    Json
+  entry      Entry   @relation("EntryReviews", fields: [entryId], references: [id])
   entryId    Int 
 }
