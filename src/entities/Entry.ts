@@ -54,30 +54,13 @@ export interface Entry extends CustomBaseEntity {
   wait?:           Date
   start?:          Date
   reviewed?:       Date
-
-  // constructor(text: string) {
-  //   this.id = 1
-  //   this.created = new Date()
-  //   this.updated = new Date()
-
-  //   this.text   = text
-  //   this.type   = EntryTypes.Transient
-  //   this.status = StatusNames.Draft
-  //   this.meta = {} as JsonType
-
-    
-  // }
 }
 
 export const EntrySchema = new EntitySchema<Entry, CustomBaseEntity>({
   name:      'Entry',
   extends:   'CustomBaseEntity',
   properties: {
-
-    // id:      { type: 'number', primary: true },
-    // created: { type: 'Date', onCreate: () => new Date() },
-    // updated: { type: 'Date', onCreate: () => new Date(), onUpdate: () => new Date(), nullable: true },
-    
+  
     uid:      { type: 'string' },
     path:     { type: 'string' }, 
 
@@ -96,21 +79,21 @@ export const EntrySchema = new EntitySchema<Entry, CustomBaseEntity>({
     tags:     { type: 'string[]', default: [] },
     meta:     { type: JsonType },
 
-// updates:
-// reviews:
+    // updates:
+    // reviews:
   
-  recur:      { type: JsonType, nullable: true },
-  repeat:     { type: JsonType, nullable: true },
-  review:     { type: JsonType, nullable: true },
+    recur:      { type: JsonType, nullable: true },
+    repeat:     { type: JsonType, nullable: true },
+    review:     { type: JsonType, nullable: true },
   
-  cron:       { type: Date, nullable: true },
-  due:        { type: Date, nullable: true },
-  end:        { type: Date, nullable: true },
-  scheduled:  { type: Date, nullable: true },
-  until:      { type: Date, nullable: true },
-  wait:       { type: Date, nullable: true },
-  start:      { type: Date, nullable: true },
-  reviewed:   { type: Date, nullable: true },
+    cron:       { type: Date, nullable: true },
+    due:        { type: Date, nullable: true },
+    end:        { type: Date, nullable: true },
+    scheduled:  { type: Date, nullable: true },
+    until:      { type: Date, nullable: true },
+    wait:       { type: Date, nullable: true },
+    start:      { type: Date, nullable: true },
+    reviewed:   { type: Date, nullable: true },
 
   }
 })
