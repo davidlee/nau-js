@@ -23,3 +23,4 @@ export function uid(): string {
   return encode( ms() )
 }
 
+export default uid

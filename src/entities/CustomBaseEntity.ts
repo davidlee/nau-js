@@ -1,20 +1,15 @@
 import { EntitySchema } from "@mikro-orm/core";
+import uid from '../uid'
 
-// export abstract class BaseEntity {
-//   @PrimaryKey()
-//   id!: number;
+export default class CustomBaseEntity {
+  id!: number
+  uid: string
+  created!: Date
+  updated?: Date
 
-//   @Property()
-//   created: Date = new Date();
-
-//   @Property({ onUpdate: () => new Date() })
-//   updated: Date = new Date();
-// }
-
-export default interface CustomBaseEntity {
-  id: number
-  created: Date
-  updated: Date
+  constructor() {
+    this.uid = uid()
+  }
 }
 
 export const schema = new EntitySchema<CustomBaseEntity>({
@@ -24,5 +19,6 @@ export const schema = new EntitySchema<CustomBaseEntity>({
     id: { type: 'number', primary: true },
     created: { type: 'Date', onCreate: () => new Date() },
     updated: { type: 'Date', onCreate: () => new Date(), onUpdate: () => new Date(), nullable: true },
+    uid: { type: 'string' }
   },
 });

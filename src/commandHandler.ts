@@ -1,25 +1,59 @@
-import * as R from './entryRepository.js'
-import { Entry } from './entities/Entry.js'
+import { Connection, EntityManager, EntityRepository, IDatabaseDriver, MikroORM } from '@mikro-orm/core'
+import config from './mikro-orm.config.js'
+import { Entry } from './entities/Entry'
 import { ParsedCommandArgs } from './parser.js'
 
 type Args = ParsedCommandArgs
 
+const orm = await MikroORM.init(config)
+
 export class CommandHandler {
 
-  constructor(){
+  orm:  MikroORM<IDatabaseDriver<Connection>>
+  em:   EntityManager
+  repo: EntityRepository<Entry>
+
+  constructor() {
+    this.orm  = orm
+    this.em   = orm.em
+    this.repo = this.em.getRepository<Entry>('Entry')
   }
 
+
   add(args: Args) {
-    // const e: Entry = buildEntry(this.processArgs(args))
-    // TODO append fields that require read repository access
-    // console.log(e)
-    // write
+    const entry: Entry = new Entry(args.modifiers.words.join(' '))
+    const result = this.em.persistAndFlush(entry)
+    return result
   }
 
   list(args: Args) {
-    // console.log("== LIST ==")
+    console.log("== LIST ==")
     // console.log(entries, entries)
   }
+
+  modify(args: Args) {
+    
+  }
+
+  remove(args: Args) {
+    
+  }
+  
+  context(args: Args) {
+    
+  }
+
+  done(args: Args) {
+    
+  }
+
+  config(args: Args) {
+    
+  }
+
+  // protected buildEntry(attrs: object) (
+  //   const entry = new Entry()
+  // )
 
   protected processArgs(args: Args) {
     const fs: object = {}

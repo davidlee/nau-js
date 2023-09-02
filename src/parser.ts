@@ -51,12 +51,12 @@ const CommandConfigs: CommandConfig[] = [
     expect: [TokenKind.Filter],
     subcommands: [],
   },
-  {
-    name: 'undo',
-    aliases: [],
-    expect: [TokenKind.Filter],
-    subcommands: [],
-  },
+  // {
+  //   name: 'undo',
+  //   aliases: [],
+  //   expect: [TokenKind.Filter],
+  //   subcommands: [],
+  // },
   {
     name: 'config',
     aliases: ['cfg'],

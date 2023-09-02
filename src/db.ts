@@ -1,7 +1,9 @@
-import { MikroORM } from '@mikro-orm/core';
+import { Connection, IDatabaseDriver, MikroORM } from '@mikro-orm/core';
 import config from './mikro-orm.config.js'
+// import { BetterSqliteDriver } from '@mikro-orm/better-sqlite';
 
-const orm = await MikroORM.init(config)
+// type ORM = MikroORM<IDatabaseDriver<Connection>>
+export const orm: MikroORM<IDatabaseDriver<Connection>> = await MikroORM.init(config)
 
 export default orm
 
