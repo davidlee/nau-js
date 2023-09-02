@@ -11,10 +11,10 @@ export default defineConfig({
   driver: BetterSqliteDriver,
   dbName: 'test.db',
   // as we are using class references here, we don't need to specify `entitiesTs` option
-  entities: ['./dist/entities'],
+  entities: ['./build/entities'],
   entitiesTs: ['./src/entities'],
   highlighter: new SqlHighlighter(),
-  metadataProvider: TsMorphMetadataProvider,
+  // metadataProvider: TsMorphMetadataProvider,
   debug: true,
   extensions: [Migrator],
 })
