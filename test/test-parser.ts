@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
-import { parse, recogniseCommand, ParsedCommand } from '../src/parser'
+import { parse, recogniseCommand, ParsedCommand } from '../src/parser.js'
+import { CommandName } from '../src/commandHandler.js'
 
 // https://taskwarrior.org/docs/syntax/
 
@@ -44,6 +45,7 @@ describe('recogniseCommand', () => {
   test('recognise: conf -> config', (t) => {
     assert.equal(recogniseCommand('conf')?.name, 'config')
   })
+
 })
 
 describe('parse', () => {
@@ -52,5 +54,12 @@ describe('parse', () => {
     let result = parse(input) as ParsedCommand
     assert.deepEqual(result.command, ['add'])
     assert.deepEqual(result.modifiers.words, ['a', 'note'])
+  })
+  
+  test('default to list', (t) => {
+    let input = 'what dis'.split(' ')
+    let result = parse(input) as ParsedCommand
+    assert.deepEqual(result.command, [CommandName.list])
+    assert.deepEqual(result.filters.words, ['what', 'dis'])
   })
 })

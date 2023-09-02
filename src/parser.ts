@@ -99,6 +99,7 @@ export type ParsedCommand = Command & ParsedCommandArgs
 type ParsingState = {
   tokens: string[]
   processedIndices: TokenKind[]
+  firstCommandIndex: number 
 }
 
 type State = ParsingState & ParsedCommand
@@ -108,6 +109,7 @@ function buildState(tokens: string[]): State {
     tokens: tokens,
     command: [],
     processedIndices: [],
+    firstCommandIndex: -1,
     filters: {
       ids:   [],
       tags:  {},
@@ -127,7 +129,6 @@ function extractCommand(state: State): ParsedCommand {
   return parsed
 }
 
-const DefaultCommandName = CommandName.list
 
 // https://taskwarrior.org/docs/syntax/
 // task <filter> <command> <modifications> <miscellaneous>
@@ -139,18 +140,14 @@ export function parse(tokens: string[]): ParsedCommand {
   let state = buildState(tokens)
       state = parseCommands(state) 
   
-  if (state.command.length === 0) 
-    state.command.push(DefaultCommandName)
-  
   // how we interpret remaining tokens depends on whether they're 
   // before or after a command
-  const commandIndex = state.processedIndices.indexOf(TokenKind.Command)
-
+  
   state.tokens.forEach((word, i) => {
     if(state.processedIndices[i] === undefined) {
       // todo match IDs, tags, etc ... otherwise
       // just treat as a word
-      if (i < commandIndex) {
+      if (i < state.firstCommandIndex || state.firstCommandIndex < 0) {
         state.processedIndices[i] = TokenKind.Filter
         state.filters.words.push(word)
       } else {
@@ -181,7 +178,13 @@ function parseCommands(state: State): State {
       // we've previously found a command, but matched no valid subcommand
         break 
   }
-  return state // FIXME rather than mutate the state, return an immutable update
+
+  if (state.command.length === 0)  
+    state.command.push(CommandName.list) 
+  
+  state.firstCommandIndex = state.processedIndices.indexOf(TokenKind.Command)
+
+  return state 
 }
 
 export function parseArgs(argv: string[]): ParsedCommand {

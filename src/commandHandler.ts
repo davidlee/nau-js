@@ -60,7 +60,10 @@ export class CommandHandler {
 
   async list(args: Args) {
     console.log("== LIST ==")
-    // console.log(entries, entries)
+    const entries = await this.repo.findAll() // TODO filters
+    entries.forEach((v,_) => {
+      console.log(v)
+    })
   }
 
   modify(args: Args) {
