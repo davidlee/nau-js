@@ -2,22 +2,21 @@ import { ParsedCommand} from './parser.js'
 import { CommandHandler } from './commandHandler.js'
 import camelCase from 'camelcase'
 
-export class Dispatcher {
-  commandHandler: CommandHandler
+let commandHandler: CommandHandler
 
-  constructor(handler: CommandHandler) {
-    this.commandHandler = handler
-  }
-  
-  dispatchCommand(cmd: ParsedCommand) {
-    this.logCommandReceived(cmd)
-
-    const methodName = camelCase(cmd.command.join('')) as keyof CommandHandler
-    return this.commandHandler[methodName](cmd)
-  }
-
-  logCommandReceived(cmd: ParsedCommand): void {
-    console.log('dispatcher >>', cmd)
-  }
+export function setHandler(handler: CommandHandler) {
+  commandHandler = handler
 }
+
+function logCommandReceived(cmd: ParsedCommand): void {
+  console.log('dispatcher >>', cmd)
+}
+
+export function dispatch(cmd: ParsedCommand) {
+  // logCommandReceived(cmd)
+
+  const methodName = camelCase(cmd.command.join('')) as keyof CommandHandler
+  return commandHandler[methodName](cmd)
+}
+
 

@@ -1,33 +1,28 @@
 import * as R from './entryRepository.js'
-import { Entry, EntryFields, buildEntry } from './entry.js'
+import { Entry } from './entities/Entry.js'
 import { ParsedCommandArgs } from './parser.js'
 
 type Args = ParsedCommandArgs
 
 export class CommandHandler {
-  private reader: R.EntryReader
-  private writer: R.EntryWriter
 
-  constructor(read: R.EntryReader, write: R.EntryWriter) {
-    this.reader = read
-    this.writer = write
+  constructor(){
   }
 
   add(args: Args) {
-    const e: Entry = buildEntry(this.processArgs(args))
+    // const e: Entry = buildEntry(this.processArgs(args))
     // TODO append fields that require read repository access
-    console.log(e)
-    return this.writer.create(e)
+    // console.log(e)
+    // write
   }
 
   list(args: Args) {
-    console.log("== LIST ==")
-    this.reader.findAll().then((entries)=> console.log('HERE::', entries))
+    // console.log("== LIST ==")
     // console.log(entries, entries)
   }
 
-  protected processArgs(args: Args): EntryFields {
-    const fs: EntryFields = {}
+  protected processArgs(args: Args) {
+    const fs: object = {}
     const ms = args.modifiers
     
     if(ms.words.length !== 0 ) { Object.assign(fs, {text: ms.words.join(' ')} ) }  

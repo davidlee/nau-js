@@ -11,7 +11,7 @@ import {
   EntitySchema,
   Ref,
 } from "@mikro-orm/core"
-import { CustomBaseEntity } from "./CustomBaseEntity.js"
+import CustomBaseEntity from "./CustomBaseEntity.js"
 
 export interface Entry extends CustomBaseEntity {
   id: number
