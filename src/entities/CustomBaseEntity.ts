@@ -1,5 +1,5 @@
 import { EntitySchema } from "@mikro-orm/core";
-import uid from '../uid'
+import uid from '../uid.js'
 
 export default class CustomBaseEntity {
   id!: number
