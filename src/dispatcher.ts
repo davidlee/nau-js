@@ -1,21 +1,20 @@
 import { ParsedCommand } from './parser.js'
-import { CommandHandler } from './commandHandler.js'
+import { CommandHandler, CommandName } from './commandHandler.js'
 import camelCase from 'camelcase'
 
-let commandHandler: CommandHandler = new CommandHandler()
+let handler: CommandHandler = new CommandHandler()
 
-export function dispatch(cmd: ParsedCommand) {
-  const methodName = camelCase(cmd.command.join('')) 
-  switch(methodName) {
-    case 'add':
-    case 'list':    
-      return commandHandler[methodName](cmd)
-    default:
-      console.log('missing handler >', cmd)
+export async function dispatch(cmd: ParsedCommand) {
+  const { command, ...args } = cmd
+  log(cmd)
+  if(command.length > 1){
+    throw new Error("subcommands not implemented")
+  } else {
+    return await handler[command[0]](args)
   }
 }
 
-function logCommandReceived(cmd: ParsedCommand): void {
+function log(cmd: ParsedCommand): void {
   console.log('dispatcher >>', cmd)
 }
 

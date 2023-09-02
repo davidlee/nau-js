@@ -6,8 +6,10 @@ enum TokenKind {
   Ids      = 'filters.ids',
 }
 
+import { CommandName } from './commandHandler.js'
+
 export type CommandConfig = {
-  name:          string
+  name:          CommandName
   aliases:       string[]
   expect:        TokenKind[]
   subcommands:   CommandConfig[]
@@ -16,49 +18,49 @@ export type CommandConfig = {
 
 const CommandConfigs: CommandConfig[] = [
   {
-    name: 'add',
+    name: CommandName.add,
     aliases: [],
     expect: [TokenKind.Modifier],
     subcommands: [],
   },
   {
-    name: 'modify',
+    name: CommandName.modify,
     aliases: [],
     expect: [TokenKind.Filter, TokenKind.Modifier],
     subcommands: [],
   },
   {
-    name: 'remove',
+    name: CommandName.remove,
     aliases: ['rm'],
     expect: [TokenKind.Filter],
     subcommands: [],
   },
   {
-    name: 'list',
+    name: CommandName.list,
     aliases: ['ls'],
     expect: [TokenKind.Filter],
     subcommands: [],
   },
   {
-    name: 'context',
+    name: CommandName.context,
     aliases: ['@'],
     expect: [TokenKind.Modifier],
     subcommands: [],
   },
   {
-    name: 'done',
+    name: CommandName.done,
     aliases: ['x'],
     expect: [TokenKind.Filter],
     subcommands: [],
   },
-  // {
-  //   name: 'undo',
-  //   aliases: [],
-  //   expect: [TokenKind.Filter],
-  //   subcommands: [],
-  // },
   {
-    name: 'config',
+    name: CommandName.undo,
+    aliases: [],
+    expect: [TokenKind.Filter],
+    subcommands: [],
+  },
+  {
+    name: CommandName.config,
     aliases: ['cfg'],
     expect: [TokenKind.Modifier],
     subcommands: [], // ...
@@ -89,7 +91,7 @@ export type ParsedCommandArgs = {
 }
 
 export type Command = {
-  command: string[]
+  command: CommandName[]
 }
 
 export type ParsedCommand = Command & ParsedCommandArgs 
@@ -125,7 +127,7 @@ function extractCommand(state: State): ParsedCommand {
   return parsed
 }
 
-const DefaultCommandName = 'list'
+const DefaultCommandName = CommandName.list
 
 // https://taskwarrior.org/docs/syntax/
 // task <filter> <command> <modifications> <miscellaneous>

@@ -13,6 +13,18 @@ import {
   JsonType,
 } from '@mikro-orm/core'
 
+export enum CommandName {
+  add     = 'add',
+  modify  = 'modify',
+  list    = 'list',
+  context = 'context',
+  done    = 'done',
+  config  = 'config',
+  remove  = 'remove',
+  undo    = 'undo',
+}
+
+
 type Args = ParsedCommandArgs
 
 const orm = await MikroORM.init(config)
@@ -30,7 +42,7 @@ export class CommandHandler {
   }
 
 
-  add(args: Args) {
+  async add(args: Args) {
     const entry: Entry = this.repo.create({
       text: args.modifiers.words.join(' '), 
       urgency: 1.0,
@@ -46,7 +58,7 @@ export class CommandHandler {
     return result
   }
 
-  list(args: Args) {
+  async list(args: Args) {
     console.log("== LIST ==")
     // console.log(entries, entries)
   }
@@ -68,6 +80,10 @@ export class CommandHandler {
   }
 
   config(args: Args) {
+    
+  }
+
+  undo(args: Args) {
     
   }
 
