@@ -1,8 +1,6 @@
 import assert from 'node:assert/strict'
 import { beforeEach, describe, test } from 'node:test'
 import { MemoryStoreAdapter } from '../src/memoryStoreAdapter.js'
-import * as E from '../src/entry.js'
-import { Value } from '@sinclair/typebox/value'
 
 // https://taskwarrior.org/docs/syntax/
 let mem: MemoryStoreAdapter | null = null

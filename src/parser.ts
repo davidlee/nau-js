@@ -76,7 +76,6 @@ export type TagSet = {
   [key: string]: string[]
 }
 
-// should use a typebox schema?
 export type ParsedCommandArgs = {
   filters: {
     ids:   number[]

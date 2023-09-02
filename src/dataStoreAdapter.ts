@@ -1,15 +1,14 @@
-import { Entry, C } from './entry.js'
-import { Value, ValueError } from '@sinclair/typebox/value'
+// import { Entrycc C } from './entry.js'
 
 export abstract class DataStoreAdapter { // need separate read/write abstract classes
 
   async persistEntry(entry:Entry): Promise<void> {
-    const transformed = Value.Encode(Entry, entry)
-    const validationResult = Value.Check(Entry, transformed)
+    // const transformed = Value.Encode(Entry, entry)
+    // const validationResult = Value.Check(Entry, transformed)
     if (validationResult) {
       return this.write(JSON.stringify(transformed))
     } else {
-      const valErrs: ValueError[] = [...C.Errors(entry)]  
+      // const valErrs: ValueError[] = [...C.Errors(entry)]  
       console.log('ValueError[] === ::', entry, valErrs)
       throw valErrs
     }
@@ -21,7 +20,7 @@ export abstract class DataStoreAdapter { // need separate read/write abstract cl
     await this.read()
     .then((lines) => {
       entries = lines.map((line) => {
-        return Value.Decode(Entry, JSON.parse(line))
+        // return Value.Decode(Entry, JSON.parse(line))
       })
     })
     .catch((e) => 

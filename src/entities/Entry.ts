@@ -1,4 +1,4 @@
-import {EntryTypes, StatusNames, }  from '../entry.js'
+import { EntryTypes, StatusNames, }  from '../entry.js'
 import {
   Cascade,
   Collection,
@@ -11,11 +11,9 @@ import {
   EntitySchema,
   Ref,
 } from "@mikro-orm/core"
-import { CustomBaseEntity } from "./BaseEntity.js"
-
+import { CustomBaseEntity } from "./CustomBaseEntity.js"
 
 export interface Entry extends CustomBaseEntity {
-
   id: number
   created: Date
   updated: Date
@@ -94,6 +92,5 @@ export const EntrySchema = new EntitySchema<Entry, CustomBaseEntity>({
     wait:       { type: Date, nullable: true },
     start:      { type: Date, nullable: true },
     reviewed:   { type: Date, nullable: true },
-
   }
 })

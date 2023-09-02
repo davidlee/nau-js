@@ -11,7 +11,7 @@ import { EntitySchema } from "@mikro-orm/core";
 //   updated: Date = new Date();
 // }
 
-export interface CustomBaseEntity {
+export default interface CustomBaseEntity {
   id: number
   created: Date
   updated: Date

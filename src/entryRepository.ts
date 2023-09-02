@@ -1,6 +1,5 @@
-import {Entry } from './entry.js'
+// import {Entry } from './entry.js'
 import { DataStoreAdapter } from './dataStoreAdapter.js'
-// import { Value, ValueError } from '@sinclair/typebox/value'
 
 export abstract class EntryRepository {
   adapter: DataStoreAdapter
