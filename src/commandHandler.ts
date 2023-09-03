@@ -3,16 +3,13 @@ import { uid } from './uid.js'
 import { Entry } from './entities/Entry.js'
 import { ParsedCommandArgs } from './parser.js'
 import { EntryTypes, StatusNames } from './entry.js'
-import { getEm, forkEm, getOrm } from './db.js'
+import { getOrm } from './db.js'
 
 import { 
-  Connection, 
   EntityManager,
   EntityRepository,
-  IDatabaseDriver,
   MikroORM,
   JsonType,
-  RequestContext,
   UseRequestContext,
 } from '@mikro-orm/core'
 
@@ -27,7 +24,6 @@ export enum CommandName {
   undo    = 'undo',
 }
 
-
 type Args = ParsedCommandArgs
 
 export class CommandHandler {
@@ -36,7 +32,7 @@ export class CommandHandler {
   em:   EntityManager
   repo: EntityRepository<Entry>
 
-  constructor(orm: MikroORM = getOrm()) {
+  constructor(orm: MikroORM) {
     this.orm  = orm
     this.em   = orm.em 
     this.repo = this.em.getRepository<Entry>('Entry')
@@ -92,13 +88,9 @@ export class CommandHandler {
     
   }
 
-  async exit(){
-    setTimeout(async () => await this.orm.close(true), 250)
+  async exit(ms:number = 250){
+    setTimeout(async () => await this.orm.close(true), ms)
   }
-
-  // protected buildEntry(attrs: object) (
-  //   const entry = new Entry()
-  // )
 
   protected processArgs(args: Args) {
     const fs: object = {}

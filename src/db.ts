@@ -18,3 +18,7 @@ export function getEm() {
 export function forkEm(o: ForkOptions) {
   return orm.em.fork(o)
 }
+
+export function close(ms:number = 250) {
+  setTimeout( async () => await orm.close(true), ms)
+}
