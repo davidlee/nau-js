@@ -1,9 +1,7 @@
-import config from './mikro-orm.config.js'
 import { uid } from './uid.js' 
 import { Entry } from './entities/Entry.js'
 import { ParsedCommandArgs } from './parser.js'
 import { EntryTypes, StatusNames } from './entry.js'
-import { getOrm } from './db.js'
 
 import { 
   EntityManager,
