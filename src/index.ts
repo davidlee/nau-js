@@ -1,10 +1,9 @@
-// import { Effect, Console } from "effect"
 import { orm, close } from './db.js'
 import { parseArgs } from './parser.js'
 import { dispatch } from './dispatcher.js'
 import { CommandHandler } from "./commandHandler.js"
-// import { Entry } from './entities/Entry.js'
-// import eventChannel from './eventChannel.js'
+import Screen from './main.js'
+import { render } from 'ink'
 
 
 // we want this guy listening
@@ -18,7 +17,8 @@ async function main() {
   }).catch((reason) => {
       console.log('index bad', reason)})
   
- close()
+ // close()
 }
 
+render(Screen({log: 'spinner'}))
 main()

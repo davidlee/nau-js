@@ -40,12 +40,10 @@ export class CommandHandler {
     this.entries = []
 
     eventChannel.on('command:add', (args: Args) => {
-      console.log('HORSE add', args)
       this.add(args)
     })
 
     eventChannel.on('command:list', (args: Args) => {
-      console.log('HORSE list', args)
      this.list(args)
     })
   }
