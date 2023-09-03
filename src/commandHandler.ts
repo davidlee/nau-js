@@ -53,18 +53,17 @@ export class CommandHandler {
   @UseRequestContext()
   async add(args: Args): Promise<void> {
     const entry: Entry = this.repo.create({
-      text: args.modifiers.words.join(' '), 
+      text:    args.modifiers.words.join(' '), 
       urgency: 1.0,
-      type: EntryTypes.Transient,
-      status: StatusNames.Draft,
-      path: '/',
+      type:    EntryTypes.Transient,
+      status:  StatusNames.Draft,
+      path:    '/',
       created: new Date(),
-      meta: new JsonType(),
-      uid: uid(),
+      meta:    new JsonType(),
+      uid:     uid(),
     }) 
-    console.log(entry)
     await this.em.persistAndFlush(entry)
-    eventChannel.emit('reply', {success: 'ok', record: entry})
+    eventChannel.emit('created', { status: 'OK', id: entry.id, record: entry })
   }
 
   @UseRequestContext()
@@ -74,12 +73,6 @@ export class CommandHandler {
     const entries = await this.repo.findAll() // TODO filters
     eventChannel.emit('entries', entries)
     this.entries = entries
-    
-    entries.forEach((v,_) => {
-      console.log(v)
-    })
-
-    console.log(entries, typeof 'entries =======')
   }
 
   modify(args: Args) {

@@ -3,27 +3,22 @@ import { orm, close } from './db.js'
 import { parseArgs } from './parser.js'
 import { dispatch } from './dispatcher.js'
 import { CommandHandler } from "./commandHandler.js"
-import EventEmitter from 'events'
-import { Entry } from './entities/Entry.js'
+// import { Entry } from './entities/Entry.js'
+// import eventChannel from './eventChannel.js'
 
-class EventSlurp extends EventEmitter {}
-const e = new EventSlurp()
 
-e.on('entries',(entries: Entry[]) => {
-  console.log('index got:', entries)
-})
+// we want this guy listening
+new CommandHandler(orm)
 
 async function main() {
-  const ch = new CommandHandler(orm)
   const command = parseArgs(process.argv)
   
- dispatch(command)
-  .then((result) => {
-    console.log('index good', result)
+  dispatch(command).then((result) => {
+    console.log('command success')
   }).catch((reason) => {
       console.log('index bad', reason)})
   
-//  close()
+ close()
 }
 
 main()
