@@ -1,6 +1,6 @@
 import { Connection, EntityManager, EntityRepository, IDatabaseDriver, MikroORM } from '@mikro-orm/core'
 import config from './mikro-orm.config.js'
-import { Entry } from './entities/Entry'
+import { Entry } from './entities/Entry.js'
 
 const orm = await MikroORM.init(config)
 

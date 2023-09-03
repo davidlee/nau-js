@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "target": "es2022",
-    "module": "esnext",
-    "lib": ["esnext", "esnext.disposable"],
+    "module": "nodenext",
+    "lib": ["es2022", "esnext.disposable"],
+    "moduleResolution": "nodenext",
+    "moduleDetection": "force",
     "outDir": "build",
     "rootDir": "src",
     "strict": true,
@@ -10,20 +12,21 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "allowJs": true,    
     "checkJs": false, 
-    "moduleResolution": "node",
-    "types": ["node", "argParse","ramda"],
+    "types": ["node", "argParse","ramda", "react"],
     "skipLibCheck": true,
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
-    "plugins": [
+    "jsx": "react",
+      "plugins": [
       {
         "name": "@effect/language-service"
       }
     ]
   },
-  "include": ["src/*.js", "src/**/*.js", "src/*.ts", "src/**/*.ts"],
+  "include": ["src/*.js", "src/**/*.js", "src/*.ts", "src/**/*.ts", "src/*.tsx", "src/**/*.tsx", "src/*.jsx", "src/**/*.jsx"],
   "exclude": ["test/*"]
 }

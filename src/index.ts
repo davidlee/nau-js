@@ -1,5 +1,6 @@
 import { parseArgs } from './parser.js'
 import { dispatch, exit } from './dispatcher.js'
+import {render, Text} from 'ink'
 
 async function main() {
   // @UseRequestContext()
