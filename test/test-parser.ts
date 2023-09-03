@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict'
-import { describe, test } from 'node:test'
+import { after, describe, test } from 'node:test'
 import { parse, recogniseCommand, ParsedCommand } from '../src/parser.js'
 import { CommandName } from '../src/commandHandler.js'
 
-// https://taskwarrior.org/docs/syntax/
-
 describe('recogniseCommand', () => {
+  
+  after( () => console.log('Ende'))
+
   test('recognise: add', (t) => {
     assert.equal(recogniseCommand('add')?.name, 'add')
   })
@@ -49,6 +50,9 @@ describe('recogniseCommand', () => {
 })
 
 describe('parse', () => {
+
+  after( () => console.log('Ende'))
+  
   test('add a note -> !add "a note"', (t) => {
     let input = 'add a note'.split(' ')
     let result = parse(input) as ParsedCommand

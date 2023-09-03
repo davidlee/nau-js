@@ -3,6 +3,7 @@ import { uid } from './uid.js'
 import { Entry } from './entities/Entry.js'
 import { ParsedCommandArgs } from './parser.js'
 import { EntryTypes, StatusNames } from './entry.js'
+import { getEm, forkEm, getOrm } from './db.js'
 
 import { 
   Connection, 
@@ -11,6 +12,8 @@ import {
   IDatabaseDriver,
   MikroORM,
   JsonType,
+  RequestContext,
+  UseRequestContext,
 } from '@mikro-orm/core'
 
 export enum CommandName {
@@ -27,21 +30,19 @@ export enum CommandName {
 
 type Args = ParsedCommandArgs
 
-const orm = await MikroORM.init(config)
-
 export class CommandHandler {
 
-  orm:  MikroORM<IDatabaseDriver<Connection>>
+  orm:  MikroORM
   em:   EntityManager
   repo: EntityRepository<Entry>
 
-  constructor() {
+  constructor(orm: MikroORM = getOrm()) {
     this.orm  = orm
-    this.em   = orm.em.fork()
+    this.em   = orm.em 
     this.repo = this.em.getRepository<Entry>('Entry')
   }
 
-
+  @UseRequestContext()
   async add(args: Args) {
     const entry: Entry = this.repo.create({
       text: args.modifiers.words.join(' '), 
@@ -53,11 +54,12 @@ export class CommandHandler {
       meta: new JsonType(),
       uid: uid(),
       
-    }) //new Entry(args.modifiers.words.join(' '))
+    }) 
     const result = this.em.persistAndFlush(entry)
-    return result
+    await result
   }
 
+  @UseRequestContext()
   async list(args: Args) {
     console.log("== LIST ==")
     const entries = await this.repo.findAll() // TODO filters
@@ -88,6 +90,10 @@ export class CommandHandler {
 
   undo(args: Args) {
     
+  }
+
+  async exit(){
+    setTimeout(async () => await this.orm.close(true), 250)
   }
 
   // protected buildEntry(attrs: object) (

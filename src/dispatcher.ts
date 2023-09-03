@@ -5,6 +5,9 @@ import { CommandHandler, CommandName } from './commandHandler.js'
 let handler: CommandHandler = new CommandHandler()
 
 export async function dispatch(cmd: ParsedCommand) {
+  function exit() {
+    handler.exit()  
+  }
   const { command, ...args } = cmd
   log(cmd)
   if(command.length === 1){
@@ -16,5 +19,9 @@ export async function dispatch(cmd: ParsedCommand) {
 
 function log(cmd: ParsedCommand): void {
   console.log('dispatcher >>', cmd)
+}
+
+export function exit(){
+  handler.exit() 
 }
 

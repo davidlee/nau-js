@@ -13,6 +13,9 @@ export const config: Options = {
   dbName:          'test.db',
   extensions:      [Migrator],
   highlighter:      new SqlHighlighter(),
+  
+  // allowGlobalContext: true, // WARNING
+  
   // as we are using class references here, we don't need to specify `entitiesTs` option
   // metadataProvider: TsMorphMetadataProvider,
   migrations: {

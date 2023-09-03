@@ -1,9 +1,20 @@
-import { Connection, IDatabaseDriver, MikroORM } from '@mikro-orm/core';
+import { 
+  MikroORM, 
+  ForkOptions
+  // EntityManager, 
+  // EntityRepository,
+} from '@mikro-orm/core';
 import config from './mikro-orm.config.js'
-// import { BetterSqliteDriver } from '@mikro-orm/better-sqlite';
 
-// type ORM = MikroORM<IDatabaseDriver<Connection>>
-export const orm: MikroORM<IDatabaseDriver<Connection>> = await MikroORM.init(config)
+export const orm = await MikroORM.init(config)
 
-export default orm
+export function getOrm() {
+  return orm
+}
+export function getEm() {
+  return orm.em
+}
 
+export function forkEm(o: ForkOptions) {
+  return orm.em.fork(o)
+}
