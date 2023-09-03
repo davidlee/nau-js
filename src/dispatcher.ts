@@ -30,3 +30,7 @@ function handler(): CommandHandler {
 
   return _handler
 }
+
+export function exit(ms:number = 250) {
+  _handler && _handler.exit(ms)
+}

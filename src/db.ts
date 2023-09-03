@@ -1,8 +1,6 @@
 import { 
   MikroORM, 
   ForkOptions
-  // EntityManager, 
-  // EntityRepository,
 } from '@mikro-orm/core';
 import config from './mikro-orm.config.js'
 
