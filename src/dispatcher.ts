@@ -1,36 +1,20 @@
-import { ParsedCommand } from './parser.js'
-import { CommandHandler, CommandName } from './commandHandler.js'
-import { getOrm } from './db.js'
-
-// import camelCase from 'camelcase'
-
-let _handler: CommandHandler 
+import { ParsedCommand, ParsedCommandArgs } from './parser.js'
+import eventChannel from './eventChannel.js'
 
 export async function dispatch(cmd: ParsedCommand) {
-  function exit() {
-    _handler && _handler.exit()
-  }
-
   const { command, ...args } = cmd
-  log(cmd)
-  if(command.length === 1){
-    return await handler()[command[0]](args)
-  } else {
-    throw new Error("subcommands not implemented")
-  }
+  sinkCommand(command.join(':'), args)
 }
 
-function log(cmd: ParsedCommand): void {
-  console.log('dispatcher >>', cmd)
-}
+function sinkCommand(command: string, args: ParsedCommandArgs) {
+   
+  eventChannel.once('reply', (event: string, result: object) => {
+    if(event === 'reply') {
+      console.log("%o", result)
+    }
+  })
 
-function handler(): CommandHandler {
-  if(_handler === undefined)
-    _handler = new CommandHandler(getOrm())
-
-  return _handler
-}
-
-export function exit(ms:number = 250) {
-  _handler && _handler.exit(ms)
+  const event = `command:${command}` 
+  console.log('sink: ', command, event, args)
+  eventChannel.emit(event, args)
 }
