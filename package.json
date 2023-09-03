@@ -64,7 +64,10 @@
     "date-fns": "^2.30.0",
     "effect": "2.0.0-next.30",
     "esbuild": "0.19.2",
+    "ink": "^4.4.0",
+    "ink-ui": "^0.4.0",
     "ramda": "^0.29.0",
+    "react": "^18.2.0",
     "reflect-metadata": "^0.1.13",
     "ulid": "^2.3.0"
   },
