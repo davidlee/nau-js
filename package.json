@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@effect/language-service": "^0.0.21",
+    "@esbuild-kit/esm-loader": "^2.5.5",
     "@mikro-orm/better-sqlite": "^5.7.14",
     "@mikro-orm/core": "^5.7.14",
     "@mikro-orm/migrations": "^5.7.14",
@@ -64,7 +65,9 @@
     "date-fns": "^2.30.0",
     "effect": "2.0.0-next.30",
     "esbuild": "0.19.2",
+    "import-jsx": "^5.0.0",
     "ink": "^4.4.0",
+    "ink-testing-library": "^3.0.0",
     "ink-ui": "^0.4.0",
     "ramda": "^0.29.0",
     "react": "^18.2.0",
